@@ -1,7 +1,6 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter,RouterProvider } from "react-router-dom";
 import "./App.css";
 import RootLayout from "./Pages/Common/RootLayout";
-import { RouterProvider } from "react-router";
 import Dashboard from "./Pages/Home/Dashboard";
 import Auth from "./Pages/Auth/Auth";
 import Login from "./Components/Auth/Login";
@@ -50,7 +49,8 @@ const routes = createBrowserRouter([
     path:'*',
     element:<NotFound />
   }
-])
+],
+{ basename: "/followave/" })
 
 function App() {
   return (
