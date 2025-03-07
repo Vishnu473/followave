@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { checkAuth, refreshToken } from "../Hooks/Redux/slices/userSlice.js";
 
@@ -7,7 +7,6 @@ export const useCheckAuth = () => {
   const { user, loading, isAuthenticated } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const location = useLocation(); 
 
   useEffect(() => {
     const verifyUser = async () => {
@@ -29,13 +28,6 @@ export const useCheckAuth = () => {
       verifyUser();
     }
   }, [dispatch, isAuthenticated, navigate]);
-
-  // Redirect after successful authentication
-  useEffect(() => {
-    if (isAuthenticated && location.pathname === "/auth/login") {
-      navigate("/dashboard"); // Redirect only if user is on the login page
-    }
-  }, [isAuthenticated, location.pathname, navigate]);
 
   return { user, loading, isAuthenticated };
 };

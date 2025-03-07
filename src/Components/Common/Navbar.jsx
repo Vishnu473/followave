@@ -5,7 +5,7 @@ import { useCheckAuth } from "../../Hooks/useCheckAuth.js";
 import { api } from "../../Services/ApiService.js";
 import Swal from "sweetalert2";
 import { useDispatch } from "react-redux";
-import { logout, clearError } from "../../Hooks/Redux/slices/userSlice.js";
+import { logout, clearError } from "../../Hooks/Redux/Slices/userSlice.js";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
