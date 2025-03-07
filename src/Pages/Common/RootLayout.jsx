@@ -7,7 +7,7 @@ const RootLayout = () => {
   return (
     <div>
         <Navbar />
-        <main>
+        <main className='bg-white dark:bg-gray-800'>
             <Outlet />
         </main>
         <Footer />
