@@ -8,6 +8,7 @@ import Register from "./Components/Auth/Register";
 import Profile from "./Pages/Common/Profile";
 import NotFound from "./Components/Layout/NotFound";
 import ProtectedLayout from "./Components/ProtectedLayout";
+import Search from "./Pages/Common/Search";
 
 const routes = createBrowserRouter(
   [
@@ -26,6 +27,10 @@ const routes = createBrowserRouter(
         {
           path: "profile",
           element: <Profile />,
+        },
+        {
+          path: "search",
+          element: <Search />,
         },
         {
           path: "auth",
@@ -66,7 +71,8 @@ const routes = createBrowserRouter(
 function App() {
   return (
     <>
-      <RouterProvider router={routes} />
+        <RouterProvider router={routes} />
+      
     </>
   );
 }
