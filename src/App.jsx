@@ -6,7 +6,7 @@ import Auth from "./Pages/Auth/Auth";
 import Login from "./Components/Auth/Login";
 import Register from "./Components/Auth/Register";
 import Profile from "./Pages/Common/Profile";
-import NotFound from "./Components/Common/NotFound";
+import NotFound from "./Components/Layout/NotFound";
 import ProtectedLayout from "./Components/ProtectedLayout";
 
 const routes = createBrowserRouter(
