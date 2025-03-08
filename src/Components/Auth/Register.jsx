@@ -53,8 +53,8 @@ const Register = () => {
   };
 
   return (
-    <form onSubmit={handleRegister} className="space-y-4">
-      <h2 className="text-2xl font-bold text-center">Register</h2>
+    <form onSubmit={handleRegister} className="space-y-4 p-6">
+      <h2 className="text-2xl font-bold text-center text-gray-900 dark:text-white">Register</h2>
 
       <input
         type="text"
@@ -63,7 +63,7 @@ const Register = () => {
         value={form.username}
         onChange={handleChange}
         onBlur={(e) => validateField("username", e.target.value)}
-        className="w-full p-3 rounded-sm bg-gray-700 focus:outline-none focus:ring-1 focus:ring-blue-500"
+        className="w-full p-3 rounded-sm  bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-white focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:ring-1 focus:ring-gray-300 dark:focus:ring-blue-500"
       />
       {errors.username && <p className="text-red-500 text-sm">{errors.username}</p>}
 
@@ -74,7 +74,7 @@ const Register = () => {
         value={form.email}
         onChange={handleChange}
         onBlur={(e) => validateField("email", e.target.value)}
-        className="w-full p-3 rounded-sm bg-gray-700 focus:outline-none focus:ring-1 focus:ring-blue-500"
+        className="w-full p-3 rounded-sm  bg-gray-200 text-gray-700 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-800  dark:text-white focus:outline-none focus:ring-1 focus:ring-gray-300 dark:focus:ring-blue-500"
       />
       {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
 
@@ -85,7 +85,7 @@ const Register = () => {
         value={form.password}
         onChange={handleChange}
         onBlur={(e) => validateField("password", e.target.value)}
-        className="w-full p-3 rounded-sm bg-gray-700 focus:outline-none focus:ring-1 focus:ring-blue-500"
+        className="w-full p-3 rounded-sm  bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-1 focus:bg-white dark:focus:bg-gray-800 focus:ring-gray-500 dark:focus:ring-blue-500"
       />
       {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
 

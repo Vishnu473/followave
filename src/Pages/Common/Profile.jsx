@@ -14,29 +14,23 @@ const Profile = () => {
   return (
     <>
       {userProfile && (
-        <div className=" min-h-screen">
-          <div className="relative flex flex-col">
-            <div className="h-40">
-              <img alt="abc" className="w-full h-full dark:bg-gray-300" />
-            </div>
-            <div className="absolute top-3/4 left-1/12">
-              <div className="flex items-end gap-10">
-                <img src={`https://instagram.fvga3-1.fna.fbcdn.net/v/t51.2885…c1UKlQUK0HJ_BuY1xuXbvQ&oe=67D0F8AF&_nc_sid=b15361`}
-                  alt={user.username}
-                  className="w-40 h-40 rounded-full bg-gray-200 dark:bg-gray-500"
-                />
-                <div className="flex flex-col gap-2">
-                  <p className="text-gray-900 dark:text-white text-3xl font-bold">
-                    {userProfile.username}
-                  </p>
-                  <p className="text-gray-900 dark:text-white text-xl">
-                    {userProfile.email}
-                  </p>
-                  <p className="text-gray-900 dark:text-white text-lg">
-                    {userProfile.bio}
-                  </p>
-                </div>
-              </div>
+        <div className="flex justify-center p-20">
+          <div className="flex gap-10 items-center">
+            <img
+              src={`https://instagram.fvga3-1.fna.fbcdn.net/v/t51.2885…c1UKlQUK0HJ_BuY1xuXbvQ&oe=67D0F8AF&_nc_sid=b15361`}
+              alt={user.username}
+              className="w-44 h-44 rounded-lg border-1 border-gray-700 dark:border-gray-300 bg-gray-200 dark:bg-gray-500"
+            />
+            <div className="flex flex-col gap-2">
+              <p className="text-gray-900 dark:text-white text-3xl font-bold">
+                {userProfile.username}
+              </p>
+              <p className="text-gray-900 dark:text-white text-xl">
+                {userProfile.email}
+              </p>
+              <p className="text-gray-900 dark:text-white text-lg">
+                {userProfile.bio}
+              </p>
             </div>
           </div>
         </div>

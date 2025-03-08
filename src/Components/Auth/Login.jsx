@@ -77,9 +77,9 @@ const Login = () => {
   return (
     <form
       onSubmit={handleLogin}
-      className="space-y-4 bg-gray-800 p-6 rounded-lg"
+      className="space-y-4 p-6 rounded-lg"
     >
-      <h2 className="text-2xl font-bold text-center text-white">Login</h2>
+      <h2 className="text-2xl font-bold text-center text-gray-900 dark:text-white">Login</h2>
 
       <input
         type="email"
@@ -93,7 +93,7 @@ const Login = () => {
           validateField("email", e.target.value);
           if (error) dispatch(clearError());
         }}
-        className="w-full p-3 rounded-sm bg-gray-700 text-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+        className="w-full p-3 rounded-sm bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-1 focus:bg-white dark:focus:bg-gray-800  focus:ring-gray-500 dark:focus:ring-blue-500"
       />
       {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
 
@@ -109,7 +109,7 @@ const Login = () => {
           validateField("password", e.target.value);
           if (error) dispatch(clearError());
         }}
-        className="w-full p-3 rounded-sm bg-gray-700 text-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+        className="w-full p-3 rounded-sm  bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-white focus:outline-none focus:bg-white dark:focus:bg-gray-800  focus:ring-1 focus:ring-gray-500 dark:focus:ring-blue-500"
       />
       {errors.password && (
         <p className="text-red-500 text-sm">{errors.password}</p>
@@ -119,7 +119,7 @@ const Login = () => {
 
       <button
         type="submit"
-        className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-sm disabled:bg-gray-500 transition-all duration-200"
+        className="w-full bg-blue-600 dark:bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-sm disabled:bg-gray-500 transition-all duration-200"
         disabled={loading}
       >
         {loading ? "Logging in..." : "Login"}

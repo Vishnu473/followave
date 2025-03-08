@@ -6,7 +6,7 @@ const Dashboard = () => {
   const [userDetails, setUserDetails] = useState(null);
 
   if (loading) {
-    return <p>Checking authentication...</p>;
+    return <p className="text-black dark:text-gray-100">Checking authentication...</p>;
   }
 
   useEffect(() => {
@@ -14,9 +14,9 @@ const Dashboard = () => {
   },[user])
 
   return (
-    <div>
-      <h1>Followave</h1>
-      {userDetails ? <p>Hi {userDetails.username}! Welcome to Followave</p> : <p>User data not found</p>}
+    <div className="flex flex-col items-center gap-5 p-20">
+      <h1 className="text-black text-3xl font-bold dark:text-gray-100">Followave</h1>
+      {userDetails ? <p className="text-black text-lg dark:text-gray-100">Hi {userDetails.username}! Welcome to Followave</p> : <p className="text-black text-lg dark:text-gray-100">User data not found</p>}
     </div>
   );
 };

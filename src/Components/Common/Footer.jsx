@@ -2,7 +2,7 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-900 text-white p-6 text-center">
+    <footer className="bg-white border-t-1 border-t-gray-300 dark:border-t-gray-600 text-gray-900 dark:bg-gray-900 dark:text-white p-6 text-center">
       <div className="container mx-auto flex flex-col md:flex-row items-center justify-between">
         <div className="mb-4 md:mb-0">
           <h2 className="text-lg font-semibold">FolloWave</h2>
