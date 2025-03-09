@@ -64,8 +64,7 @@ const routes = createBrowserRouter(
       path: "*",
       element: <NotFound />,
     },
-  ],
-  { basename: "/followave/" }
+  ]
 );
 
 function App() {
