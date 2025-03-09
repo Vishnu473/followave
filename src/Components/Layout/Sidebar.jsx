@@ -26,7 +26,7 @@ const Sidebar = ({ isOpen }) => {
                     ? "bg-blue-500 dark:bg-blue-500 text-gray-100"
                     : "hover:bg-gray-300 dark:hover:bg-gray-700"
                 } flex items-center ${
-                  !isOpen && "justify-center"
+                  !isOpen ? "justify-center" : ""
                 }  p-2 rounded-md`
               }
             >

@@ -1,11 +1,10 @@
-import { Bell, Lightbulb, LightbulbIcon, Menu, Moon, Sun, X } from "lucide-react";
+import { Bell,Menu, Moon, Sun} from "lucide-react";
 import React, { useState, useEffect } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink} from "react-router-dom";
 import { useCheckAuth } from "../../Hooks/useCheckAuth.js";
 import { useTheme } from "../../Context/Theme.jsx";
 
 const Navbar = ({ toggleSidebar }) => {
-  const location = useLocation();
   const { user } = useCheckAuth();
 
   const { theme, lightTheme, darkTheme } = useTheme();
@@ -76,15 +75,15 @@ const Navbar = ({ toggleSidebar }) => {
               <NavLink
                 to="/profile"
                 className={({ isActive }) =>
-                  isActive &&
-                  ` border-2 rounded-full border-blue-500 dark:border-blue-300`
+                  isActive ?
+                  ` border-2 rounded-full border-blue-500 dark:border-blue-300` : ""
                 }
               >
                 <img
                   src={
-                    user.data.profile ||
-                    "https://img.freepik.com/premium-vector/happy-maha-shivratri-with-trisulam-hindu-festival-celebrated-lord-shiva-night-vector-free_1157715-3303.jpg"
-                  }
+                    user?.data?.profile ||
+                    "assets/default_profile.webp"
+                  } alt={user?.username}
                   className="w-10 h-10 object-cover rounded-full border border-gray-700 dark:border-gray-300 bg-gray-200 dark:bg-gray-500"
                 />
               </NavLink>

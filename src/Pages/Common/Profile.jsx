@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { logout, clearError } from "../../Hooks/Redux/slices/userSlice.js";
 import { useNavigate } from "react-router-dom";
 
+
 const Profile = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -18,6 +19,7 @@ const Profile = () => {
 
   const callLogoutApi = async () => {
     try {
+
       const response = await api.post(
         "/users/logout",
         {},
@@ -76,7 +78,7 @@ const Profile = () => {
         <div className="flex justify-center ">
           <div className="flex flex-col sm:flex-row gap-6 sm:gap-10 items-center text-center sm:text-left">
             <img
-              src={`https://img.freepik.com/premium-vector/happy-maha-shivratri-with-trisulam-hindu-festival-celebrated-lord-shiva-night-vector-free_1157715-3303.jpg`}
+              src={userProfile?.profilePic || "assets/default_profile.webp"}
               alt={userProfile.username}
               className="w-24 h-24 object-cover sm:w-36 sm:h-36 lg:w-44 lg:h-44 rounded-full border border-gray-700 dark:border-gray-300 bg-gray-200 dark:bg-gray-500"
             />
