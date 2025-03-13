@@ -3,7 +3,7 @@ import axios from "axios";
 export const api = axios.create({
     baseURL:"https://followave-backend.onrender.com/api/v1",
     withCredentials:true,
-    timeout:10000
+    timeout:20000
 })
 
 api.interceptors.request.use(

@@ -29,6 +29,10 @@ const routes = createBrowserRouter(
           element: <Profile />,
         },
         {
+          path:"search/profile/:profileId",
+          element: <Profile />
+        },
+        {
           path: "search",
           element: <Search />,
         },
@@ -64,14 +68,14 @@ const routes = createBrowserRouter(
       path: "*",
       element: <NotFound />,
     },
-  ]
+  ],
+  { basename: "/followave/" }
 );
 
 function App() {
   return (
     <>
-        <RouterProvider router={routes} />
-      
+      <RouterProvider router={routes} />
     </>
   );
 }
