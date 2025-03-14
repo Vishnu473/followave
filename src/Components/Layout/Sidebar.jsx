@@ -16,13 +16,9 @@ const Sidebar = ({ isOpen }) => {
           >
             <nav className="flex flex-col space-y-2">
               {[
-                { name: "New", path: "/dashboard", icon: <Plus /> },
+                 { name: "Home", icon: <Home />, path: "/dashboard" },
                 { name: "Search", path: "/search", icon: <Search /> },
-                {
-                  name: "Notifications",
-                  path: "/notifications",
-                  icon: <Bell />,
-                },
+                { name: "New", path: "/dashboard", icon: <Plus /> },
                 {
                   name: "Settings",
                   path: "/account-settings",
@@ -53,8 +49,12 @@ const Sidebar = ({ isOpen }) => {
             {[
               { name: "Home", icon: <Home />, path: "/dashboard" },
               { name: "Search", icon: <Search />, path: "/search" },
-              { name: "Notifications", icon: <Bell />, path: "/notifications" },
-              { name: "Profile", icon: <User />, path: "/profile" },
+              { name: "New", path: "/dashboard", icon: <Plus /> },
+              {
+                name: "Settings",
+                path: "/account-settings",
+                icon: <Settings />,
+              }
             ].map((item) => (
               <NavLink
                 key={item.name}

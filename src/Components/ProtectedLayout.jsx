@@ -11,11 +11,9 @@ const ProtectedLayout = ({ children, needLogIn=true }) => {
 
   useEffect(() => {
     if(needLogIn && loggedInStatus !== needLogIn){
-      console.log("User not logged");
       navigate("/auth/login");
     }
     else if(!needLogIn && loggedInStatus !== needLogIn){
-      console.log("User already loggedIn");
       navigate("/dashboard");
     }
     setCheckUser(false);

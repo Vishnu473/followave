@@ -76,7 +76,7 @@ const Navbar = ({ toggleSidebar }) => {
                 to="/profile"
                 className={({ isActive }) =>
                   isActive ?
-                  ` border-2 rounded-full border-blue-500 dark:border-blue-300` : ""
+                  ` border-2 rounded-full border-blue-500 dark:border-blue-300` : " border-gray-700 dark:border-gray-300 border-2 rounded-full"
                 }
               >
                 <img
@@ -84,7 +84,7 @@ const Navbar = ({ toggleSidebar }) => {
                     user?.data?.profile ||
                     "assets/default_profile.webp"
                   } alt={user?.username}
-                  className="w-10 h-10 object-cover rounded-full border border-gray-700 dark:border-gray-300 bg-gray-200 dark:bg-gray-500"
+                  className="w-8 h-8 object-cover rounded-full bg-gray-200 dark:bg-gray-500"
                 />
               </NavLink>
               

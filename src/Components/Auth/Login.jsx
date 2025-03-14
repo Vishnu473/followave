@@ -7,9 +7,7 @@ import { useNavigate } from "react-router-dom";
 const Login = () => {
   const [form, setForm] = useState({ email: "", password: "" });
   const dispatch = useDispatch();
-  const { loading, error } = useSelector(
-    (state) => state.user
-  );
+  const { loading, error } = useSelector((state) => state.user);
   const [errors, setErrors] = useState({});
 
   const navigate = useNavigate();
@@ -45,10 +43,12 @@ const Login = () => {
 
     let newErrors = {};
     if (!form.email.trim()) newErrors.email = "Email is required.";
-    else if (!emailRegex.test(form.email)) newErrors.email = "Invalid email format.";
+    else if (!emailRegex.test(form.email))
+      newErrors.email = "Invalid email format.";
     if (!form.password.trim()) newErrors.password = "Password is required.";
     else if (!passwordRegex.test(form.password))
-      newErrors.password = "Password must be 8+ chars with 1 uppercase, 1 lowercase, 1 number, and 1 special character.";
+      newErrors.password =
+        "Password must be 8+ chars with 1 uppercase, 1 lowercase, 1 number, and 1 special character.";
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -61,11 +61,14 @@ const Login = () => {
       ).unwrap();
       if (response && response?.success) {
         console.log(response?.message);
-        Swal.fire(
-          response?.success ? "Success" : "Error",
-          response?.message,
-          response?.success ? "success" : "error"
-        );
+        Swal.fire({
+          title: response?.success ? "Success" : "Error",
+          text: response?.message,
+          icon: response?.success ? "success" : "error",
+          timer: 1500,
+          showConfirmButton: false,
+          timerProgressBar: true,
+        });
         navigate("/dashboard");
       }
     } catch (error) {
@@ -75,11 +78,10 @@ const Login = () => {
   };
 
   return (
-    <form
-      onSubmit={handleLogin}
-      className="space-y-4 p-6 rounded-lg"
-    >
-      <h2 className="text-2xl font-bold text-center text-gray-900 dark:text-white">Login</h2>
+    <form onSubmit={handleLogin} className="space-y-4 p-6 rounded-lg">
+      <h2 className="text-2xl font-bold text-center text-gray-900 dark:text-white">
+        Login
+      </h2>
 
       <input
         type="email"

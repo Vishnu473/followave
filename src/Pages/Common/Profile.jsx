@@ -15,7 +15,6 @@ const Profile = () => {
   const [userProfile, setUserProfile] = useState(null);
 
   useEffect(() => {
-    
     if (profileId) {
       setUserProfile(null);
       fetchUserProfile(profileId);
@@ -40,10 +39,9 @@ const Profile = () => {
         navigate("/not-found");
       }
     } catch (error) {
-      console.log("Error",error);
-      navigate("/not-found")
-    }
-    finally{
+      console.log("Error", error);
+      navigate("/not-found");
+    } finally {
       setIsLoading(false);
     }
   };
@@ -100,40 +98,41 @@ const Profile = () => {
         <p className="flex justify-center text-gray-900 dark:text-white">
           Loading userProfile.....
         </p>
-      ):
-      (userProfile ? (
-        <div className="flex justify-center ">
-          <div className="flex flex-col sm:flex-row gap-6 sm:gap-10 items-center text-center sm:text-left">
-            <img
-              src={userProfile?.profilePic || "assets/default_profile.webp"}
-              alt={userProfile.username}
-              className="w-24 h-24 object-cover sm:w-36 sm:h-36 lg:w-44 lg:h-44 rounded-full border border-gray-700 dark:border-gray-300 bg-gray-200 dark:bg-gray-500"
-            />
-            <div className="flex flex-col gap-2">
-              <p className="text-gray-900 dark:text-white text-lg sm:text-2xl lg:text-3xl font-bold">
-                {userProfile.username}
-              </p>
-              <p className="text-gray-900 dark:text-white text-base sm:text-xl">
-                {userProfile.email}
-              </p>
-              <p className="text-gray-900 dark:text-white text-sm sm:text-lg">
-                {userProfile.bio}
-              </p>
+      ) : userProfile ? (
+        <>
+          <div className="flex justify-center ">
+            <div className="flex flex-col sm:flex-row gap-6 sm:gap-10 items-center text-center sm:text-left">
+              <img
+                src={userProfile?.profilePic || "assets/default_profile.webp"}
+                alt={userProfile.username}
+                className="w-24 h-24 object-cover sm:w-36 sm:h-36 lg:w-44 lg:h-44 rounded-full border border-gray-700 dark:border-gray-300 bg-gray-200 dark:bg-gray-500"
+              />
+              <div className="flex flex-col gap-2">
+                <p className="text-gray-900 dark:text-white text-lg sm:text-2xl lg:text-3xl font-bold">
+                  {userProfile.username}
+                </p>
+                <p className="text-gray-900 dark:text-white text-base sm:text-xl">
+                  {userProfile.email}
+                </p>
+                <p className="text-gray-900 dark:text-white text-sm sm:text-lg">
+                  {userProfile.bio}
+                </p>
+              </div>
             </div>
           </div>
-        </div>
+          {profileId ? null : (
+            <button
+              onClick={handleLogout}
+              className="mt-5 border-2 px-2 py-1 rounded-sm hover:text-red-400 transition text-black dark:text-white"
+            >
+              Logout
+            </button>
+          )}
+        </>
       ) : (
         <p className="text-black dark:text-white ">
-          No user found 
+          Checking user credentials.....
         </p>
-      ))}
-      {profileId ? null : (
-        <button
-          onClick={handleLogout}
-          className="mt-5 border-2 px-2 py-1 rounded-sm hover:text-red-400 transition text-black dark:text-white"
-        >
-          Logout
-        </button>
       )}
     </div>
   );
