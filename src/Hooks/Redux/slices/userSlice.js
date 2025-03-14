@@ -74,19 +74,31 @@ const userSlice = createSlice({
         state.error = action.payload;
         state.isAuthenticated = false;
       })
+      .addCase(checkAuth.pending, (state) => {
+        state.loading = true;
+        state.isAuthenticated = false;
+      })
       .addCase(checkAuth.fulfilled, (state, action) => {
         state.user = action.payload;
+        state.loading = false;
         state.isAuthenticated = true;
       })
       .addCase(checkAuth.rejected, (state, action) => {
         state.user = null;
+        state.loading = false;
+        state.isAuthenticated = false;
+      })
+      .addCase(refreshToken.pending, (state) => {
+        state.loading = true;
         state.isAuthenticated = false;
       })
       .addCase(refreshToken.fulfilled, (state,action) => {
         state.user = action.payload;
+        state.loading = false;
         state.isAuthenticated = true;
       })
       .addCase(refreshToken.rejected, (state, action) => {
+        state.loading = false;
         state.user = null;
         state.error = action.payload;
         state.isAuthenticated = false;

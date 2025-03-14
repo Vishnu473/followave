@@ -4,20 +4,20 @@ import { useNavigate } from 'react-router-dom'
 
 const ProtectedLayout = ({ children, needLogIn=true }) => {
 
-  const loggedInStatus = useSelector((state) => state.user.isAuthenticated)
+  const { isAuthenticated, loading } = useSelector((state) => state.user);
   const navigate = useNavigate();
-
   const [checkUser, setCheckUser] = useState(true);
 
   useEffect(() => {
-    if(needLogIn && loggedInStatus !== needLogIn){
-      navigate("/auth/login");
+    if (!loading) {
+      if (needLogIn && !isAuthenticated) {
+        navigate('/auth/login');
+      } else if (!needLogIn && isAuthenticated) {
+        navigate('/dashboard');
+      }
+      setCheckUser(false);
     }
-    else if(!needLogIn && loggedInStatus !== needLogIn){
-      navigate("/dashboard");
-    }
-    setCheckUser(false);
-  },[navigate,loggedInStatus,needLogIn])
+  }, [navigate, isAuthenticated, needLogIn, loading]);
   
   return ( checkUser ? <div className='text-black dark:text-white'>
     Checking user authentication.....
