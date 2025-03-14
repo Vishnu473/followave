@@ -22,7 +22,7 @@ const Login = () => {
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const passwordRegex =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&_])[A-Za-z\d@$!%*?&_]{8,}$/;
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=\+\[\]{}|;:'",.?/])[A-Za-z\d!@#$%^&*()\-_=\+\[\]{}|;:'",.?/]{8,}$/;
 
   const validateField = (name, value) => {
     setErrors((prev) => ({ ...prev, [name]: "" }));
