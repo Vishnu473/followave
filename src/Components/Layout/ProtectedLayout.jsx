@@ -11,7 +11,7 @@ const ProtectedLayout = ({ children, needLogIn=true }) => {
   useEffect(() => {
     if (!loading) {
       if (needLogIn && !isAuthenticated) {
-        navigate('/auth/login');
+        navigate('/home');
       } else if (!needLogIn && isAuthenticated) {
         navigate('/dashboard');
       }

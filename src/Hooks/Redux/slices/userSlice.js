@@ -1,10 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { api } from "../../../Services/ApiService.js";
+import { APIEndPoints } from "../../../Services/UrlConstants.js";
 
 // Async action to login user
 export const loginUser = createAsyncThunk("user/login", async (loginFormData, { rejectWithValue }) => {
   try {
-    const response = await api.post("/users/login",loginFormData,{withCredentials:true});
+    const response = await api.post(APIEndPoints.login,loginFormData,{withCredentials:true});
     return response.data;
   } catch (error) {
     return rejectWithValue(error.response?.data?.message || "Login failed");
@@ -13,7 +14,7 @@ export const loginUser = createAsyncThunk("user/login", async (loginFormData, { 
 
 export const registerUser = createAsyncThunk("user/register", async (registerformData, { rejectWithValue }) => {
   try {
-    const response = await api.post("/users/register",registerformData,{withCredentials:true});
+    const response = await api.post(APIEndPoints.register,registerformData,{withCredentials:true});
     return response.data;
   } catch (error) {
     return rejectWithValue(error.response?.data?.message || "Registration failed");
@@ -23,7 +24,7 @@ export const registerUser = createAsyncThunk("user/register", async (registerfor
 // Async action to check auth
 export const checkAuth = createAsyncThunk("user/checkAuth", async (credentials, { rejectWithValue }) => {
   try {
-    const response = await api.post("/users/get-user-profile",credentials,{withCredentials:true});
+    const response = await api.post(APIEndPoints.getUserProfile,credentials,{withCredentials:true});
     return response.data;
   } catch (error) {
     return rejectWithValue(error.response?.data?.message || "User not authenticated");
@@ -33,10 +34,10 @@ export const checkAuth = createAsyncThunk("user/checkAuth", async (credentials, 
 // Async action to refresh token
 export const refreshToken = createAsyncThunk("user/refreshToken", async (credentials, { dispatch, rejectWithValue }) => {
   try {
-    await api.post("/users/refresh-token",credentials,{withCredentials:true});
+    await api.post(APIEndPoints.refreshToken,credentials,{withCredentials:true});
     return await dispatch(checkAuth()).unwrap(); // Call checkAuth() after refreshing token
   } catch (error) {
-    return rejectWithValue("Please log in again.");
+    return rejectWithValue("Kindly log in.");
   }
 });
 

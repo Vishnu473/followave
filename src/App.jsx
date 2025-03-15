@@ -1,14 +1,15 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Navigate } from "react-router-dom";
 import "./App.css";
-import RootLayout from "./Pages/Common/RootLayout";
-import Dashboard from "./Pages/Home/Dashboard";
+import RootLayout from "./Pages/Layout/RootLayout";
+import Dashboard from "./Pages/Main/Dashboard";
 import Auth from "./Pages/Auth/Auth";
 import Login from "./Components/Auth/Login";
 import Register from "./Components/Auth/Register";
-import Profile from "./Pages/Common/Profile";
-import NotFound from "./Components/Layout/NotFound";
-import ProtectedLayout from "./Components/ProtectedLayout";
-import Search from "./Pages/Common/Search";
+import Profile from "./Pages/Features/Profile";
+import NotFound from "./Components/Shared/NotFound";
+import ProtectedLayout from "./Components/Layout/ProtectedLayout";
+import Search from "./Pages/Features/Search";
+import Home from "./Pages/Main/Home";
 
 const routes = createBrowserRouter(
   [
@@ -17,8 +18,12 @@ const routes = createBrowserRouter(
       element: <RootLayout />,
       children: [
         {
-          index: true,
-          element: <Dashboard />,
+          path: "home",
+          element: (
+            <ProtectedLayout needLogIn={false}>
+              <Home />
+            </ProtectedLayout>
+          ),
         },
         {
           path: "dashboard",
@@ -29,8 +34,8 @@ const routes = createBrowserRouter(
           element: <Profile />,
         },
         {
-          path:"search/profile/:profileId",
-          element: <Profile />
+          path: "search/profile/:profileId",
+          element: <Profile />,
         },
         {
           path: "search",
@@ -55,10 +60,6 @@ const routes = createBrowserRouter(
                   <Register />
                 </ProtectedLayout>
               ),
-            },
-            {
-              path: "logout",
-              element: <Login />,
             },
           ],
         },

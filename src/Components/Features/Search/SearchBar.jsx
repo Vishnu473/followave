@@ -1,8 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { X, Search as SearchIcon } from "lucide-react";
 
-const SearchBar = ({ onSearch }) => {
-  const [searchWord, setSearchWord] = useState("");
+const SearchBar = ({ searchWord, setSearchWord, onSearch, onclear }) => {
   const inputRef = useRef();
 
   useEffect(() => {
@@ -11,13 +10,14 @@ const SearchBar = ({ onSearch }) => {
 
   useEffect(() => {
     if (searchWord === "") {
+      onclear();
       inputRef.current.focus();
     }
   }, [searchWord]);
 
   const handleSearch = (e) => {
     e.preventDefault();
-    onSearch(searchWord);
+    onSearch();
   };
 
   return (
@@ -36,7 +36,7 @@ const SearchBar = ({ onSearch }) => {
         {searchWord && (
           <button
             type="button"
-            onClick={() => setSearchWord("")}
+            onClick={onclear}
             className="absolute right-8 sm:right-10 top-1/2 transform -translate-y-1/2 text-gray-600 dark:text-gray-300"
           >
             <X />

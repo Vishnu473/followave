@@ -2,12 +2,14 @@ import React, { useState } from "react";
 import { api } from "../../Services/ApiService";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import SearchBar from "../../Components/Search/SearchBar";
-import SearchResults from "../../Components/Search/SearchResults";
+import SearchBar from "../../Components/Features/Search/SearchBar";
+import SearchResults from "../../Components/Features/Search/SearchResults";
+import { APIEndPoints } from "../../Services/UrlConstants";
 
 const Search = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [searchWord, setSearchWord] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.user);
@@ -16,7 +18,7 @@ const Search = () => {
     try {
       setIsLoading(true);
       const response = await api.post(
-        `/users/search-users?query=${search}`,
+        APIEndPoints.searchUsersByWord(search),
         {},
         { withCredentials: true }
       );
@@ -29,10 +31,14 @@ const Search = () => {
     }
   };
 
-  const handleSearch = async (searchWord) => {
+  const handleSearch = async () => {
     setSearchResults([]);
     setError("");
-    if (!searchWord.trim()) return;
+
+    if (!searchWord.trim()) {
+      setSearchResults([]);
+      return;
+    }
 
     let searchData = await callSearchApi(searchWord);
     if (searchData?.error) return;
@@ -42,6 +48,12 @@ const Search = () => {
     } else {
       setError("No results found");
     }
+  };
+
+  const handleClearSearch = () => {
+    setSearchWord("");
+    setSearchResults([]);
+    setError("");
   };
 
   const handleUserClick = (profileId) => {
@@ -54,12 +66,17 @@ const Search = () => {
 
   return (
     <>
-      <SearchBar onSearch={handleSearch} />
+      <SearchBar
+        searchWord={searchWord}
+        setSearchWord={setSearchWord}
+        onSearch={handleSearch}
+        onclear={handleClearSearch}
+      />
       <SearchResults
         isLoading={isLoading}
         searchResults={searchResults}
         error={error}
-        searchWord={searchResults.length === 0 ? "" : searchResults}
+        searchWord={searchWord}
         onUserClick={handleUserClick}
       />
     </>

@@ -19,7 +19,7 @@ export const useCheckAuth = () => {
           await dispatch(refreshToken()).unwrap();
         } catch (refreshError) {
           console.warn("Refresh token expired. Redirecting to login.");
-          navigate("/auth/login");
+          navigate("/home");
         }
       }
     };
