@@ -63,9 +63,9 @@ const Profile = () => {
   const handleSave = async () => {
     try {
       console.log(updatedProfile);
-      
+
       const response = await api.post(
-        APIEndPoints.updateProfile, 
+        APIEndPoints.updateProfile,
         updatedProfile,
         { withCredentials: true }
       );
@@ -85,25 +85,31 @@ const Profile = () => {
       setSelectedImage(URL.createObjectURL(file));
       const formData = new FormData();
       formData.append("file", file); // Use 'image' as expected by backend
-      
+
       console.log([...formData]);
-      
+
       try {
-        const response = await api.post(APIEndPoints.uploadProfilePic, formData, {
-          withCredentials: true,
-          headers: { "Content-Type": "multipart/form-data" },
-        });
-  
+        const response = await api.post(
+          APIEndPoints.uploadProfilePic,
+          formData,
+          {
+            withCredentials: true,
+            headers: { "Content-Type": "multipart/form-data" },
+          }
+        );
+        console.log(response);
+        
         if (response.status === 200) {
-          setUserProfile({ ...userProfile, profilePic: response.data.imageUrl });
-          Swal.fire("Success", "Profile picture updated", "success");
+          setUserProfile({
+            ...userProfile,
+            profilePic: response.data.url,
+          });
         }
       } catch (error) {
         Swal.fire("Error", "Failed to update image", "error");
       }
     }
   };
-  
 
   // useEffect(() => {
   //   if (profileId) {
@@ -184,70 +190,66 @@ const Profile = () => {
   };
 
   return (
-    // <div className="p-6 sm:p-10 lg:p-20">
-    //   {isLoading ? (
-    //     <p className="flex justify-center text-gray-900 dark:text-white">
-    //       Loading userProfile.....
-    //     </p>
-    //   ) : userProfile ? (
-    //     <>
-    //       <div className="flex justify-center ">
-    //         <div className="flex flex-col sm:flex-row gap-6 sm:gap-10 items-center text-center sm:text-left">
-    //           <img
-    //             src={userProfile?.profilePic || "assets/default_profile.webp"}
-    //             alt={userProfile.username}
-    //             className="w-24 h-24 object-cover sm:w-36 sm:h-36 lg:w-44 lg:h-44 rounded-full border border-gray-700 dark:border-gray-300 bg-gray-200 dark:bg-gray-500"
-    //           />
-    //           <div className="flex flex-col gap-2">
-    //             <p className="text-gray-900 dark:text-white text-lg sm:text-2xl lg:text-3xl font-bold">
-    //               {userProfile.username}
-    //             </p>
-    //             <p className="text-gray-900 dark:text-white text-base sm:text-xl">
-    //               {userProfile.email}
-    //             </p>
-    //             <p className="text-gray-900 dark:text-white text-sm sm:text-lg">
-    //               {userProfile.bio}
-    //             </p>
-    //           </div>
-    //         </div>
-    //       </div>
-    //       {profileId ? null : (
-    //         <button
-    //           onClick={handleLogout}
-    //           className="mt-5 border-2 px-2 py-1 rounded-sm hover:text-red-400 transition text-black dark:text-white"
-    //         >
-    //           Logout
-    //         </button>
-    //       )}
-    //     </>
-    //   ) : (
-    //     <p className="text-black dark:text-white ">
-    //       Checking user credentials.....
-    //     </p>
-    //   )}
-    // </div>
-    <div className="p-6 sm:p-10 lg:p-20">
+    <div className="p-2 sm:p-10 lg:p-20">
       {isLoading ? (
-        <p className="text-center text-gray-900 dark:text-white">Loading profile...</p>
+        <p className="text-center text-gray-900 dark:text-white">
+          Loading profile...
+        </p>
       ) : userProfile ? (
         <>
           <div className="flex justify-center">
-            <div className="flex flex-col sm:flex-row gap-6 sm:gap-10 items-center text-center sm:text-left">
-              <div className="relative">
-                <img
-                  src={selectedImage || userProfile?.profilePic || "assets/default_profile.webp"}
-                  alt={userProfile.username}
-                  className="w-24 h-24 object-cover sm:w-36 sm:h-36 lg:w-44 lg:h-44 rounded-full border border-gray-700 dark:border-gray-300 bg-gray-200 dark:bg-gray-500"
-                />
-                {!profileId && (
-                  <label className="absolute bottom-2 right-2 bg-gray-800 text-white p-1 rounded-full cursor-pointer">
-                    <Upload className="w-4 h-4" />
-                    <input type="file" onChange={handleImageUpload} className="hidden" />
-                  </label>
-                )}
+            <div className="p-1 flex flex-col sm:flex-col gap-2 sm:gap-10 items-start text-left sm:text-left">
+              <div className="w-full flex flex-row items-center gap-x-4">
+                <div className="relative flex-shrink-0">
+                  <img
+                    src={
+                      selectedImage ||
+                      userProfile?.profilePic ||
+                      "assets/default_profile.webp"
+                    }
+                    alt={userProfile.username}
+                    className="w-20 h-20 object-cover sm:w-36 sm:h-36 lg:w-44 lg:h-44 rounded-full border border-gray-700 dark:border-gray-300 bg-gray-200 dark:bg-gray-500"
+                  />
+                  {!profileId && editMode && (
+                    <label className="absolute bottom-1 right-1 md:bottom-2 md:right-2 lg:bottom-3 lg:right-3 bg-gray-800 text-white p-1 rounded-full cursor-pointer">
+                      <Upload className="w-3 h-3 sm:w-4 sm:h-4 lg:w-4 lg:h-4" />
+                      <input
+                        type="file"
+                        onChange={handleImageUpload}
+                        className="hidden"
+                      />
+                    </label>
+                  )}
+                </div>
+                <div className="flex flex-row justify-end gap-x-2 sm:gap-x-4 lg:gap-x-6">
+                  <div className="text-center">
+                    <p className="text-sm sm:text-xl lg:text-2xl dark:text-gray-100 md:font-bold">
+                      12
+                    </p>
+                    <p className="text-sm sm:text-xl lg:text-2xl dark:text-gray-400">
+                      Posts
+                    </p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-sm sm:text-xl lg:text-2xl dark:text-gray-100 md:font-bold">
+                      12345
+                    </p>
+                    <p className="text-sm sm:text-xl lg:text-2xl dark:text-gray-400">
+                      Followers
+                    </p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-sm sm:text-xl lg:text-2xl dark:text-gray-100 md:font-bold">
+                      6789
+                    </p>
+                    <p className="text-sm sm:text-xl lg:text-2xl dark:text-gray-400">
+                      Following
+                    </p>
+                  </div>
+                </div>
               </div>
 
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-1">
                 {editMode ? (
                   <>
                     <input
@@ -317,7 +319,18 @@ const Profile = () => {
           </div>
         </>
       ) : (
-        <p className="text-center text-gray-900 dark:text-white">Checking user credentials...</p>
+        <p className="text-center text-gray-900 dark:text-white">
+          Checking user credentials...
+        </p>
+      )}
+
+      {profileId ? null : (
+        <button
+          onClick={handleLogout}
+          className="mt-5 border-2 px-2 py-1 rounded-sm hover:text-red-400 transition text-black dark:text-white"
+        >
+          Logout
+        </button>
       )}
     </div>
   );
