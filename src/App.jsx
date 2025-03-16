@@ -10,6 +10,9 @@ import NotFound from "./Components/Shared/NotFound";
 import ProtectedLayout from "./Components/Layout/ProtectedLayout";
 import Search from "./Pages/Features/Search";
 import Home from "./Pages/Main/Home";
+import AccountSettings from "./Pages/Features/AccountSettings";
+import AddPost from "./Components/Features/Posts/addPost";
+import AddPostForm from "./Components/Features/Posts/AddPostForm";
 
 const routes = createBrowserRouter(
   [
@@ -40,6 +43,18 @@ const routes = createBrowserRouter(
         {
           path: "search",
           element: <Search />,
+        },
+        {
+          path:"/account-settings",
+          element: <AccountSettings />
+        },
+        {
+          path:"/add-post",
+          element: <AddPost/>
+        },
+        {
+          path:"/add-post-form",
+          element: <AddPostForm />
         },
         {
           path: "auth",

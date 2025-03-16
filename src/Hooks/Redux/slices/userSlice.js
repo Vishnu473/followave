@@ -41,6 +41,15 @@ export const refreshToken = createAsyncThunk("user/refreshToken", async (credent
   }
 });
 
+export const updateProfile = createAsyncThunk("user/updateProfile", async(updatedProfile, { rejectWithValue}) => {
+  try {
+    const response = await api.post(APIEndPoints.updateProfile, updatedProfile,{ withCredentials: true });
+    return response.data;
+  } catch (error) {
+    return rejectWithValue("Failed to update profile. Retry after sometime");
+  }
+})
+
 const userSlice = createSlice({
   name: "user",
   initialState: {
@@ -103,7 +112,18 @@ const userSlice = createSlice({
         state.user = null;
         state.error = action.payload;
         state.isAuthenticated = false;
-      });
+      })
+      .addCase(updateProfile.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(updateProfile.fulfilled, (state, action) => {
+        state.user = action.payload;
+        state.loading = false;
+      })
+      .addCase(updateProfile.rejected, (state, action) => {
+        state.user = null;
+        state.loading = false;
+      })
   },
 });
 

@@ -70,7 +70,7 @@ const Navbar = ({ toggleSidebar }) => {
               >
                 <Bell />
               </NavLink>
-              <NavLink
+              {/* <NavLink
                 to="/profile"
                 className={({ isActive }) =>
                   isActive
@@ -83,7 +83,7 @@ const Navbar = ({ toggleSidebar }) => {
                   alt={user?.username}
                   className="w-8 h-8 object-cover rounded-full bg-gray-200 dark:bg-gray-500"
                 />
-              </NavLink>
+              </NavLink> */}
             </div>
           )}
         </div>

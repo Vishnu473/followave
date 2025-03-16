@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { api } from "../../Services/ApiService.js";
 import Swal from "sweetalert2";
 import { useDispatch } from "react-redux";
-import { logout, clearError } from "../../Hooks/Redux/slices/userSlice.js";
+import { updateProfile} from "../../Hooks/Redux/slices/userSlice.js";
 import { useNavigate, useParams } from "react-router-dom";
 import { APIEndPoints } from "../../Services/UrlConstants.js";
 import { Edit, Save, Upload } from "lucide-react";
@@ -62,20 +62,24 @@ const Profile = () => {
 
   const handleSave = async () => {
     try {
-      console.log(updatedProfile);
+      const updatedUserResponse = await dispatch(
+        updateProfile(updatedProfile)
+      ).unwrap();
 
-      const response = await api.post(
-        APIEndPoints.updateProfile,
-        updatedProfile,
-        { withCredentials: true }
-      );
-      if (response.status === 200) {
-        setUserProfile(response.data.data);
+      if (updatedUserResponse && updatedUserResponse?.success) {
+        setUserProfile(updatedUserResponse.data);
         setEditMode(false);
-        Swal.fire("Success", "Profile updated successfully", "success");
+        Swal.fire({
+          title: updatedUserResponse?.success ? "Success" : "Error",
+          text: updatedUserResponse?.message,
+          icon: updatedUserResponse?.success ? "success" : "error",
+          timer: 1500,
+          showConfirmButton: false,
+          timerProgressBar: true,
+        });
       }
     } catch (error) {
-      Swal.fire("Error", "Failed to update profile", "error");
+      Swal.fire("Error", error?.response?.data?.message || error || "Failed to update profile", "error");
     }
   };
 
@@ -84,108 +88,34 @@ const Profile = () => {
     if (file) {
       setSelectedImage(URL.createObjectURL(file));
       const formData = new FormData();
-      formData.append("file", file); // Use 'image' as expected by backend
-
-      console.log([...formData]);
+      formData.append("file", file); // Use 'file' as key
 
       try {
         const response = await api.post(
-          APIEndPoints.uploadProfilePic,
+          APIEndPoints.uploadSingleProfilePic,
           formData,
           {
             withCredentials: true,
             headers: { "Content-Type": "multipart/form-data" },
           }
         );
-        console.log(response);
-        
+
         if (response.status === 200) {
-          setUserProfile({
-            ...userProfile,
-            profilePic: response.data.url,
-          });
+          const imageUrl = response.data.url;
+
+        setUserProfile({
+          ...userProfile,
+          profilePic: imageUrl,
+        });
+
+        setUpdatedProfile({
+          ...updatedProfile,
+          profilePic: imageUrl,
+        });
         }
       } catch (error) {
         Swal.fire("Error", "Failed to update image", "error");
       }
-    }
-  };
-
-  // useEffect(() => {
-  //   if (profileId) {
-  //     setUserProfile(null);
-  //     fetchUserProfile(profileId);
-  //   } else {
-  //     setUserProfile(user?.data);
-  //   }
-  // }, [user, profileId]);
-
-  // const fetchUserProfile = async (profileId) => {
-  //   try {
-  //     setIsLoading(true);
-  //     const response = await api.post(
-  //       APIEndPoints.getProfileById(profileId),
-  //       {},
-  //       { withCredentials: true }
-  //     );
-  //     console.log(response);
-
-  //     if (response.status === 200) {
-  //       setUserProfile(response.data.data);
-  //     } else {
-  //       navigate("/not-found");
-  //     }
-  //   } catch (error) {
-  //     console.log("Error", error);
-  //     navigate("/not-found");
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
-
-  const callLogoutApi = async () => {
-    try {
-      const response = await api.post(
-        APIEndPoints.logout,
-        {},
-        { withCredentials: true }
-      );
-
-      if (response && response.status === 200) {
-        dispatch(logout());
-        dispatch(clearError());
-
-        Swal.fire({
-          icon: "success",
-          title: "Logged out successfully",
-          showConfirmButton: false,
-          timer: 1000,
-        }).then(async () => {
-          await navigate("/home", { replace: true });
-        });
-      }
-    } catch (error) {
-      console.error("Logout failed:", error);
-      Swal.fire({
-        icon: "error",
-        title: "Logout Failed",
-        text: "Something went wrong. Please try again.",
-      });
-    }
-  };
-
-  const handleLogout = async () => {
-    const result = await Swal.fire({
-      icon: "warning",
-      title: "Are you sure you want to Log Out?",
-      text: "You will need to log in again.",
-      showCancelButton: true,
-      confirmButtonText: "Yes, Log Out",
-      cancelButtonText: "No, Stay Logged In",
-    });
-
-    if (result.isConfirmed) {
-      await callLogoutApi();
     }
   };
 
@@ -324,14 +254,14 @@ const Profile = () => {
         </p>
       )}
 
-      {profileId ? null : (
+      {/* {profileId ? null : (
         <button
           onClick={handleLogout}
           className="mt-5 border-2 px-2 py-1 rounded-sm hover:text-red-400 transition text-black dark:text-white"
         >
           Logout
         </button>
-      )}
+      )} */}
     </div>
   );
 };
