@@ -11,13 +11,13 @@ const RootLayout = () => {
   const { loading, isAuthenticated } = useSelector((state) => state.user);
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col">
       <Navbar toggleSidebar={() => setSidebarOpen(!isSidebarOpen)} />
 
       <div className="flex flex-1">
         <Sidebar isOpen={isSidebarOpen} />
 
-        <main className="flex-1 bg-white dark:bg-gray-800 overflow-auto">
+        <main className="flex-1 bg-white dark:bg-gray-800 pb-16 md:pb-0">
           {loading ? (
             <div className="absolute inset-0 flex flex-col items-center bg-white dark:bg-gray-900 bg-opacity-75 z-50">
               <p className="text-xl sm:text-2xl md:text-2xl lg:text-3xl font-bold text-blue-500 dark:text-blue-400">
@@ -27,7 +27,7 @@ const RootLayout = () => {
             </div>
           ) : (
             <>
-              <Outlet />
+              <Outlet/>
               {isAuthenticated ? (
                 <Navigate to="/dashboard" replace />
               ) : (
@@ -38,7 +38,7 @@ const RootLayout = () => {
         </main>
       </div>
 
-      <Footer className="hidden md:block" />
+      <Footer className="hidden md:block mt-auto" />
     </div>
   );
 };

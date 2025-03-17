@@ -110,7 +110,7 @@ const AddPostForm = () => {
   };
 
   return (
-    <div className="bg-gray-200 dark:bg-gray-800 flex items-center justify-center p-6">
+    <div className=" bg-gray-200 dark:bg-gray-800 flex items-center justify-center p-6">
       <div className="max-w-lg w-100 bg-white dark:bg-gray-700 shadow-md rounded-lg">
         <div className="relative p-2 border-b-1 flex flex-row items-center justify-center border-gray-300 dark:border-gray-500">
           {isUploaded && (
@@ -240,13 +240,13 @@ const AddPostForm = () => {
           </div>
         </div>
         <div className="flex flex-row justify-between p-2">
-          <button className="mt-4 flex flex-row items-center justify-center w-30 bg-red-400 text-white py-2 rounded-md disabled:bg-gray-400">
+          <button className="flex flex-row items-center justify-center w-30 bg-red-400 text-white py-2 rounded-md disabled:bg-gray-400">
             Cancel
           </button>
           <button
             disabled={!isFormValid}
             onClick={handlePost}
-            className={`mt-4 flex flex-row items-center justify-center w-30 py-2 rounded-md 
+            className={`flex flex-row items-center justify-center w-30 py-2 rounded-md 
     ${
       isFormValid ? "bg-blue-500 text-white" : "bg-gray-400 cursor-not-allowed"
     }`}

@@ -11,7 +11,7 @@ const Sidebar = ({ isOpen }) => {
       {isAuthenticated && (
         <>
           <div
-            className={`hidden md:flex flex-col bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-100 h-screen border-r-2 border-r-gray-200 dark:border-r-gray-600 p-4 ${
+            className={`hidden md:flex flex-col bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-100 border-r-2 border-r-gray-200 dark:border-r-gray-600 p-4 ${
               isOpen ? "w-52" : "w-20"
             }`}
           >
