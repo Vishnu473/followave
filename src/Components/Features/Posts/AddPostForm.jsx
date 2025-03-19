@@ -4,10 +4,13 @@ import { useCheckAuth } from "../../../Hooks/useCheckAuth";
 import CustomTextArea from "../../Shared/CustomTextArea";
 import CustomToggleSwitch from "../../Shared/CustomToggleSwitch";
 import MediaCarousel from "../../Shared/MediaCarousel";
+import { api } from "../../../Services/ApiService";
+import { APIEndPoints } from "../../../Services/UrlConstants";
 
 const AddPostForm = () => {
   const { user } = useCheckAuth();
   const [mediaFiles, setMediaFiles] = useState([]);
+  const [removedMedia, setRemovedMedia] = useState([]);
   const [isFormValid, setIsFormValid] = useState(false);
   const [isUploaded, setIsUploaded] = useState(false);
   const [formData, setFormData] = useState({
@@ -34,8 +37,23 @@ const AddPostForm = () => {
     setIsFormValid(isValid);
   }, [mediaFiles, formData.title, formData.description]);
 
+  // const setMediaFilesWithCheck = (updatedMedia) => {
+  //   const removed = mediaFiles.filter((file) => !updatedMedia.includes(file));
+  //   setRemovedMedia([...removedMedia, ...removed.map((file) => file.publicId)]);
+  //   setMediaFiles(updatedMedia);
+  //   if (updatedMedia.length === 0) {
+  //     setIsUploaded(false);
+  //   }
+  // };
+
   const setMediaFilesWithCheck = (updatedMedia) => {
+    const removed = mediaFiles.filter((file) => !updatedMedia.includes(file));
+    setRemovedMedia((prev) => [
+      ...prev,
+      ...removed.map((file) => file.publicId),
+    ]);
     setMediaFiles(updatedMedia);
+
     if (updatedMedia.length === 0) {
       setIsUploaded(false);
     }
@@ -53,16 +71,86 @@ const AddPostForm = () => {
     return !Object.values(newErrors).includes(true);
   };
 
-  const handleFileUpload = (event) => {
+  const handleFileUpload = async (event) => {
     const files = Array.from(event.target.files);
-    if (files.length + mediaFiles.length <= maxFileUpload) {
-      setMediaFiles([...mediaFiles, ...files]);
-      setErrors((prev) => ({ ...prev, media: false }));
-    } else {
+    if (files.length + mediaFiles.length > maxFileUpload) {
       alert(`You can upload up to ${maxFileUpload} files only.`);
+      return;
     }
     if (files.length > 0) {
       setIsUploaded(true);
+    }
+
+    const imageFiles = files.filter((file) => file.type.startsWith("image/"));
+    const videoFiles = files.filter((file) => file.type.startsWith("video/"));
+
+    const uploadedMedia = [];
+
+    try {
+      if (imageFiles.length > 0) {
+        const imageFormData = new FormData();
+        imageFiles.forEach((file) =>
+          imageFormData.append(imageFiles.length > 1 ? "files" : "file", file)
+        );
+
+        const imageResponse = await api.post(
+          imageFiles.length > 1
+            ? APIEndPoints.uploadMultipleImages
+            : APIEndPoints.uploadSingleProfilePic,
+          imageFormData,
+          {
+            withCredentials: true,
+            headers: { "Content-Type": "multipart/form-data" },
+          }
+        );
+        console.log(imageResponse);
+        
+        if (imageResponse.data.success) {
+          imageResponse.data.file.forEach((file, index) => {
+            uploadedMedia.push({
+              url: imageResponse.data.url[index],
+              publicId: file.filename,
+            });
+          });
+        }
+      }
+
+      if (videoFiles.length > 0) {
+        const videoFormData = new FormData();
+        videoFiles.forEach((file) =>
+          videoFormData.append(videoFiles.length > 1 ? "files" : "file", file)
+        );
+
+        const videoResponse = await api.post(
+          videoFiles.length > 1
+            ? APIEndPoints.uploadMultipleVideos
+            : APIEndPoints.uploadSingleVideo,
+          videoFormData,
+          {
+            withCredentials: true,
+            headers: { "Content-Type": "multipart/form-data" },
+          }
+        );
+
+        if (videoResponse.data.success) {
+          videoResponse.data.file.forEach((file, index) => {
+            uploadedMedia.push({
+              url: videoResponse.data.url[index],
+              publicId: file.filename,
+            });
+          });
+        }
+      }
+
+      if (uploadedMedia.length > 0) {
+        setMediaFiles((prev) => [...prev, ...uploadedMedia]);
+        setErrors((prev) => ({ ...prev, media: false }));
+      } else {
+        setIsUploaded(false);
+      }
+    } catch (error) {
+      console.error("Upload error:", error);
+      setIsUploaded(false);
     }
   };
 
@@ -97,8 +185,26 @@ const AddPostForm = () => {
     }));
   };
 
-  const handlePost = () => {
-    if (!validate()) return; // Stop if validation fails
+  const handlePost = async () => {
+    if (!validate()) return;
+
+    if (removedMedia.length > 0) {
+      try {
+        const removedMediaRequest = { publicIds: removedMedia };
+        const response = await api.delete("/delete/media", {
+          data: removedMediaRequest,
+          withCredentials: true,
+        });
+
+        if (response.status !== 200 || !response.data.success) {
+          throw new Error(response.data.message || "Failed to delete media");
+        }
+
+        console.log("Media deleted successfully:", response.data);
+      } catch (error) {
+        console.error("Error deleting media:", error);
+      }
+    }
 
     console.log("Submitting Post:", {
       mediaFiles,

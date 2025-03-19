@@ -17,7 +17,7 @@ const RootLayout = () => {
       <div className="flex flex-1">
         <Sidebar isOpen={isSidebarOpen} />
 
-        <main className="flex-1 bg-white dark:bg-gray-800 pb-16 md:pb-0">
+        <main className="flex-1 bg-white dark:bg-gray-800 pb-16 md:pb-0 min-h-screen">
           {loading ? (
             <div className="absolute inset-0 flex flex-col items-center bg-white dark:bg-gray-900 bg-opacity-75 z-50">
               <p className="text-xl sm:text-2xl md:text-2xl lg:text-3xl font-bold text-blue-500 dark:text-blue-400">

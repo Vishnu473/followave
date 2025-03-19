@@ -116,7 +116,7 @@ const MediaCarousel = ({ media, setMedia, maxLimit }) => {
           className="mt-2 flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-300"
         >
           <Image size={18} />
-          <span>{showPreview ? "Hide all" : "Show all"}</span>
+          <span>{showPreview ? "Hide" : "Edit"}</span>
         </button>
       )}
 
