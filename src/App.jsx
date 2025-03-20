@@ -49,10 +49,6 @@ const routes = createBrowserRouter(
           element: <AccountSettings />
         },
         {
-          path:"/add-post",
-          element: <AddPost/>
-        },
-        {
           path:"/add-post-form",
           element: <AddPostForm />
         },

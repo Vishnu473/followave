@@ -185,7 +185,7 @@ const MediaCarousel = ({ media, setMedia, maxLimit, setHaveFiles, setCanceledMed
           </button>
         )}
 
-        <div className="w-full h-80 flex items-center justify-center bg-gray-100 dark:bg-gray-800 rounded-md overflow-hidden">
+        <div className="w-full h-80 flex items-center justify-center bg-gray-100 dark:bg-gray-800 overflow-hidden">
           {media[currentIndex].type.startsWith("image/") ? (
             <img
               src={media[currentIndex].url}

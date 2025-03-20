@@ -18,8 +18,8 @@ const Sidebar = ({ isOpen }) => {
             <nav className="flex flex-col space-y-2">
               {[
                 { name: "Home", icon: <Home />, path: "/dashboard" },
-                { name: "Search", path: "/add-post-form", icon: <Search /> },
-                { name: "New", path:"/add-post", icon: <Plus /> },
+                { name: "Search", path: "/search", icon: <Search /> },
+                { name: "New", path:"/add-post-form", icon: <Plus /> },
                 {
                   name: "Settings",
                   path: "/account-settings",
@@ -64,8 +64,8 @@ const Sidebar = ({ isOpen }) => {
           <div className="md:hidden fixed bottom-0 left-0 w-full bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-white flex justify-around p-3 shadow-lg">
             {[
               { name: "Home", icon: <Home />, path: "/dashboard" },
-              { name: "Search", icon: <Search />, path: "/add-post-form" },
-              { name: "New", path:"/add-post", icon: <Plus /> },
+              { name: "Search", icon: <Search />, path: "/search" },
+              { name: "New", path:"/add-post-form", icon: <Plus /> },
               {
                 name: "Settings",
                 path: "/account-settings",

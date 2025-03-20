@@ -267,171 +267,170 @@ const AddPostForm = () => {
     }
   };
 
-  
-
   return (
     <>
-      {isLoadingApi ? (
-        <div className="fixed inset-0 w-full h-screen bg-white">
-        <Loading msg="Publishing Post..." />
-      </div>
-      ) : (
-        <div className=" bg-gray-200 dark:bg-gray-800 flex items-center justify-center p-6">
-          <div className="max-w-lg w-100 bg-white dark:bg-gray-700 shadow-md rounded-lg">
-            <div className="relative p-2 border-b-1 flex flex-row items-center justify-center border-gray-300 dark:border-gray-500">
-              {isUploaded && (
-                <ArrowLeft
-                  className="ml-2 absolute left-0 h-5 w-5"
-                  onClick={handleBackClick}
-                />
-              )}
-              <h1 className="text-center text-black dark:text-white font-semibold">
-                Create new post
-              </h1>
-            </div>
-            {isUploaded ? (
-              <MediaCarousel
-                media={mediaFiles}
-                setMedia={setMediaFiles}
-                maxLimit={maxFileUpload}
-                setHaveFiles={setIsUploaded}
-                setCanceledMedia={setRemovedMedia}
+      <div className="relative bg-gray-200 dark:bg-gray-800 flex items-center justify-center p-6">
+        <div className="max-w-lg w-100 bg-white dark:bg-gray-700 shadow-md rounded-lg">
+          <div className="relative p-2 border-b-1 flex flex-row items-center justify-center border-gray-300 dark:border-gray-500">
+            {isUploaded && (
+              <ArrowLeft
+                className="ml-2 absolute left-0 h-5 w-5 dark:text-white"
+                onClick={handleBackClick}
               />
-            ) : (
-              <div className="h-50 w-full flex flex-col justify-center items-center gap-2">
-                {mediaUploading ? (
-                  // Show the loading indicator while uploading
-                  <Loading msg={"Uploading your Media..."} />
-                ) : (
-                  <>
-                    <h2 className="text-center text-black dark:text-white">
-                      Add your photos and videos here
-                    </h2>
-                    <input
-                      type="file"
-                      accept="image/*,video/*"
-                      multiple
-                      className="hidden"
-                      id="file-upload"
-                      onChange={handleFileUpload}
-                    />
-                    <label
-                      htmlFor="file-upload"
-                      className="bg-blue-500 text-white px-4 py-1 rounded-md flex items-center justify-center cursor-pointer"
-                    >
-                      Upload Files
-                    </label>
-                    {errors.media && (
-                      <p className="text-red-500 text-sm mt-1">
-                        At least one media file is required.
-                      </p>
-                    )}
-                  </>
-                )}
-              </div>
             )}
-
-            <div className="p-3 flex flex-col gap-2 border-t-1 border-t-gray-300 mt-2">
-              <div className="flex flex-row gap-2">
-                <img
-                  src={user?.data?.profilePic || "assets/default_profile.webp"}
-                  alt={user?.username}
-                  className="w-6 h-6 object-cover rounded-full bg-gray-200 dark:bg-gray-500"
-                />
-                <p className="text-sm sm:text-base dark:text-gray-100 font-semibold text-center text-black">
-                  {user?.data?.username}
-                </p>
-              </div>
-              <div className="border-b-1 border-gray-300">
-                <input
-                  type="text"
-                  placeholder="Title"
-                  value={formData.title}
-                  onChange={(e) => {
-                    setFormData((prev) => ({ ...prev, title: e.target.value }));
-                    setErrors((prev) => ({ ...prev, title: false })); // Clear error
-                  }}
-                  className={`outline-0 w-full p-1 text-sm sm:text-base ${
-                    errors.title ? "border-red-500" : "border-gray-300"
-                  }`}
-                />
-                {errors.title && (
-                  <p className="text-red-500 text-sm mt-1">
-                    Title must be at least 3 characters.
-                  </p>
-                )}
-              </div>
-              <div className="border-b-1 border-gray-300">
-                <CustomTextArea
-                  placeholder={"Description"}
-                  charCount={1000}
-                  value={formData.description}
-                  onChange={(desc) => {
-                    setFormData((prev) => ({ ...prev, description: desc }));
-                    setErrors((prev) => ({ ...prev, description: false })); // Clear error
-                  }}
-                />
-                {errors.description && (
-                  <p className="text-red-500 text-sm mt-1">
-                    Description must be at least 10 characters.
-                  </p>
-                )}
-              </div>
-              <div className="">
-                <CustomToggleSwitch
-                  onChange={(newPrivacy) =>
-                    setFormData((prev) => ({ ...prev, privacy: newPrivacy }))
-                  }
-                  content={"Post Visibilty to public"}
-                />
-              </div>
-              <div>
-                <input
-                  type="text"
-                  placeholder="Add a tag and press Enter"
-                  value={tagInput}
-                  onChange={(e) => setTagInput(e.target.value)}
-                  onKeyPress={handleKeyPress}
-                  className="text-sm sm:text-base w-full p-2 outline-0 border-b-1 border-gray-300 rounded"
-                />
-                <div className="flex flex-wrap gap-2 mt-2">
-                  {formData.tags.map((tag, index) => (
-                    <span
-                      key={index}
-                      className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm"
-                    >
-                      {tag}{" "}
-                      <button
-                        type="button"
-                        onClick={() => removeTag(index)}
-                        className="ml-1 text-red-500"
-                      >
-                        &times;
-                      </button>
-                    </span>
-                  ))}
-                </div>
-              </div>
+            <h1 className="text-center text-black dark:text-white font-semibold">
+              Create new post
+            </h1>
+          </div>
+          {isUploaded ? (
+            <MediaCarousel
+              media={mediaFiles}
+              setMedia={setMediaFiles}
+              maxLimit={maxFileUpload}
+              setHaveFiles={setIsUploaded}
+              setCanceledMedia={setRemovedMedia}
+            />
+          ) : (
+            <div className="h-50 w-full flex flex-col justify-center items-center gap-2">
+              {mediaUploading ? (
+                <Loading msg={"Uploading your Media..."} />
+              ) : (
+                <>
+                  <h2 className="text-center text-black dark:text-white">
+                    Add your photos and videos here
+                  </h2>
+                  <input
+                    type="file"
+                    accept="image/*,video/*"
+                    multiple
+                    className="hidden"
+                    id="file-upload"
+                    onChange={handleFileUpload}
+                  />
+                  <label
+                    htmlFor="file-upload"
+                    className="bg-blue-500 text-white px-4 py-1 rounded-md flex items-center justify-center cursor-pointer"
+                  >
+                    Upload Files
+                  </label>
+                  {errors.media && (
+                    <p className="text-red-500 text-sm mt-1">
+                      At least one media file is required.
+                    </p>
+                  )}
+                </>
+              )}
             </div>
-            <div className="flex flex-row justify-between p-2">
-              <button className="flex flex-row items-center justify-center w-30 bg-red-400 text-white py-2 rounded-md disabled:bg-gray-400">
-                Cancel
-              </button>
-              <button
-                disabled={!isFormValid || isLoadingApi}
-                onClick={handlePost}
-                className={`flex flex-row items-center justify-center w-30 py-2 rounded-md 
-    ${isFormValid ? "bg-blue-500 text-white" : "bg-gray-400 cursor-not-allowed"}
-  `}
-              >
-                Post
-              </button>
+          )}
 
-              {/* <Send size={20} className="text-blue-500" /> */}
+          <div className="p-3 flex flex-col gap-2 border-t-1 border-t-gray-300 mt-2">
+            <div className="flex flex-row gap-2">
+              <img
+                src={user?.data?.profilePic || "assets/default_profile.webp"}
+                alt={user?.username}
+                className="w-6 h-6 object-cover rounded-full bg-gray-200 dark:bg-gray-500"
+              />
+              <p className="text-sm sm:text-base dark:text-gray-100 font-semibold text-center text-black">
+                {user?.data?.username}
+              </p>
+            </div>
+            <div className="border-b-1 border-gray-300">
+              <input
+                type="text"
+                placeholder="Title"
+                value={formData.title}
+                onChange={(e) => {
+                  setFormData((prev) => ({
+                    ...prev,
+                    title: e.target.value,
+                  }));
+                  setErrors((prev) => ({ ...prev, title: false })); // Clear error
+                }}
+                className={`outline-0 w-full dark:text-white p-1 text-sm sm:text-base dark: ${
+                  errors.title ? "border-red-500" : "border-gray-300"
+                }`}
+              />
+              {errors.title && (
+                <p className="text-red-500 text-sm mt-1">
+                  Title must be at least 3 characters.
+                </p>
+              )}
+            </div>
+            <div className="border-b-1 border-gray-300">
+              <CustomTextArea
+                placeholder={"Description"}
+                charCount={1000}
+                value={formData.description}
+                onChange={(desc) => {
+                  setFormData((prev) => ({ ...prev, description: desc }));
+                  setErrors((prev) => ({ ...prev, description: false })); // Clear error
+                }}
+              />
+              {errors.description && (
+                <p className="text-red-500 text-sm mt-1">
+                  Description must be at least 10 characters.
+                </p>
+              )}
+            </div>
+            <div className="">
+              <CustomToggleSwitch
+                onChange={(newPrivacy) =>
+                  setFormData((prev) => ({ ...prev, privacy: newPrivacy }))
+                }
+                content={"Post Visibilty to public"}
+              />
+            </div>
+            <div>
+              <input
+                type="text"
+                placeholder="Add a tag and press Enter"
+                value={tagInput}
+                onChange={(e) => setTagInput(e.target.value)}
+                onKeyPress={handleKeyPress}
+                className="text-sm sm:text-base w-full p-2 dark:text-white outline-0 border-b-1 border-gray-300"
+              />
+              <div className="flex flex-wrap gap-2 mt-2">
+                {formData.tags.map((tag, index) => (
+                  <span
+                    key={index}
+                    className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm"
+                  >
+                    {tag}{" "}
+                    <button
+                      type="button"
+                      onClick={() => removeTag(index)}
+                      className="ml-1 text-red-500"
+                    >
+                      &times;
+                    </button>
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
+          <div className="flex flex-row justify-between p-2">
+            <button className="flex flex-row items-center justify-center w-30 bg-red-400 text-white py-2 rounded-md disabled:bg-gray-400">
+              Cancel
+            </button>
+            <button
+              disabled={!isFormValid || isLoadingApi}
+              onClick={handlePost}
+              className={`flex flex-row items-center justify-center w-30 py-2 rounded-md 
+    ${isFormValid ? "bg-blue-500 text-white" : "bg-gray-400 cursor-not-allowed"}
+  `}
+            >
+              Post
+            </button>
+
+            {/* <Send size={20} className="text-blue-500" /> */}
+          </div>
         </div>
-      )}
+        {isLoadingApi && (
+            <div className="absolute inset-0 flex items-center justify-center bg-white/70 dark:bg-gray-800/70 z-50">
+              <Loading msg={"Publishing post..."} />
+            </div>
+          )}
+      </div>
     </>
   );
 };
