@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { ChevronLeft, ChevronRight, Plus, X, Image } from "lucide-react";
+import { api } from "../../Services/ApiService";
+import { APIEndPoints } from "../../Services/UrlConstants";
 
-const MediaCarousel = ({ media, setMedia, maxLimit }) => {
+const MediaCarousel = ({ media, setMedia, maxLimit, setHaveFiles, setCanceledMedia }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showPreview, setShowPreview] = useState(false);
 
@@ -38,22 +40,135 @@ const MediaCarousel = ({ media, setMedia, maxLimit }) => {
   };
 
   const removeMedia = (index) => {
+    console.log("Available Media",media);
     const updatedMedia = media.filter((_, i) => i !== index);
+    console.log("After removing media",updatedMedia);
+    const removedFile = media[index];
+    setCanceledMedia((prev) => [...prev,removedFile])
     setMedia(updatedMedia);
     if (updatedMedia.length === 0) {
-      handleMediaChange(updatedMedia); // Notify parent to reset UI
-    }
-    else if (currentIndex >= updatedMedia.length && updatedMedia.length > 0) {
+      setHaveFiles(updatedMedia.length > 0)
+    } else if (currentIndex >= updatedMedia.length && updatedMedia.length > 0) {
       setCurrentIndex(updatedMedia.length - 1);
     }
   };
 
-  const handleAddMedia = (event) => {
+  const handleAddMedia = async (event) => {
     const files = Array.from(event.target.files);
-    if (media.length + files.length <= maxLimit) {
-      setMedia([...media, ...files]);
-    } else {
-      alert(`You can only upload up to ${maxLimit} files only.`);
+    console.log(files);
+    
+    if (files.length + media.length > maxLimit) {
+      alert(`You can upload up to ${maxLimit} files only.`);
+      return;
+    }
+    // if (files.length > 0) {
+    //   setIsUploaded(true);
+    // }
+    const imageFiles = files.filter((file) => file.type.startsWith("image/"));
+    // const videoFiles = files.filter((file) => file.type.startsWith("video/"));
+
+    const uploadedMedia = [];
+
+    try {
+      if (imageFiles.length > 0) {
+        const imageFormData = new FormData();
+        if(imageFiles.length === 1){
+          console.log(imageFiles);
+          
+          imageFormData.append("file",imageFiles[0]);
+          console.log("FormData",imageFormData);
+          
+        }
+        else{
+          imageFiles.forEach((file) =>
+            imageFormData.append("files", file)
+          );
+        }
+        
+
+        const imageResponse = await api.post(
+          imageFiles.length > 1
+            ? APIEndPoints.uploadMultipleImages
+            : APIEndPoints.uploadSingleProfilePic,
+          imageFormData,
+          {
+            withCredentials: true,
+            headers: { "Content-Type": "multipart/form-data" },
+          }
+        );
+        console.log(imageResponse);
+
+        if (imageResponse.data.success) {
+          const multipleFiles = Array.isArray(imageResponse.data.file);
+
+          if (!multipleFiles) {
+            let file = imageResponse.data.file;
+            uploadedMedia.push({
+              url: file.path,
+              publicId: file.filename,
+              type: file.mimetype,
+            });
+          } else {
+            imageResponse.data.file.forEach((file, index) => {
+              uploadedMedia.push({
+                url: imageResponse.data.url[index],
+                publicId: file.filename,
+                type: file.mimetype,
+              });
+            });
+          }
+        }
+      }
+
+      // if (videoFiles.length > 0) {
+      //   const videoFormData = new FormData();
+      //   videoFiles.forEach((file) =>
+      //     videoFormData.append(videoFiles.length > 1 ? "files" : "file", file)
+      //   );
+
+      //   const videoResponse = await api.post(
+      //     videoFiles.length > 1
+      //       ? APIEndPoints.uploadMultipleVideos
+      //       : APIEndPoints.uploadSingleVideo,
+      //     videoFormData,
+      //     {
+      //       withCredentials: true,
+      //       headers: { "Content-Type": "multipart/form-data" },
+      //     }
+      //   );
+
+      //   if (videoResponse.data.success) {
+      //     const multipleFiles = videoResponse.data.file.length === 1 ? false : true;
+
+      //     if (!multipleFiles) {
+      //       let file = videoResponse.data.file;
+      //       uploadedMedia.push({
+      //         url: file.path,
+      //         publicId: file.filename,
+      //         type: file.mimetype,
+      //       });
+      //     } else {
+      //       videoResponse.data.file.forEach((file, index) => {
+      //         uploadedMedia.push({
+      //           url: videoResponse.data.url[index],
+      //           publicId: file.filename,
+      //           type: file.mimetype,
+      //         });
+      //       });
+      //     }
+      //   }
+      // }
+
+      if (uploadedMedia.length > 0) {
+        setMedia((prev) => [...prev, ...uploadedMedia]);
+        // setErrors((prev) => ({ ...prev, media: false }));
+      }
+      // else {
+      //   setIsUploaded(false);
+      // }
+    } catch (error) {
+      console.error("Upload error:", error);
+      // setIsUploaded(false);
     }
   };
 
@@ -73,13 +188,13 @@ const MediaCarousel = ({ media, setMedia, maxLimit }) => {
         <div className="w-full h-80 flex items-center justify-center bg-gray-100 dark:bg-gray-800 rounded-md overflow-hidden">
           {media[currentIndex].type.startsWith("image/") ? (
             <img
-              src={URL.createObjectURL(media[currentIndex])}
+              src={media[currentIndex].url}
               alt="Preview"
               className="w-full h-full object-cover"
             />
           ) : (
             <video
-              src={URL.createObjectURL(media[currentIndex])}
+              src={media[currentIndex].url}
               controls
               className="w-full h-full"
             />
@@ -126,15 +241,12 @@ const MediaCarousel = ({ media, setMedia, maxLimit }) => {
             <div key={index} className="relative flex-shrink-0">
               {file.type.startsWith("image/") ? (
                 <img
-                  src={URL.createObjectURL(file)}
+                  src={file.url}
                   alt="Thumbnail"
                   className="h-16 w-16 object-cover rounded-md"
                 />
               ) : (
-                <video
-                  src={URL.createObjectURL(file)}
-                  className="h-16 w-16 rounded-md"
-                />
+                <video src={file.url} className="h-16 w-16 rounded-md" />
               )}
 
               <button
