@@ -18,4 +18,5 @@ export const APIEndPoints = {
 
   //Post API endPoints
   addPost:"posts/add-post",
+  getUserposts: (userId) => `/posts/get-user-posts/${userId}`
 };

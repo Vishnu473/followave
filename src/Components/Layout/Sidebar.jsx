@@ -12,10 +12,10 @@ const Sidebar = ({ isOpen }) => {
         <>
           <div
             className={`hidden md:flex flex-col bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-100 border-r-2 border-r-gray-200 dark:border-r-gray-600 p-4 ${
-              isOpen ? "w-52" : "w-20"
+              isOpen ? "w-48" : "w-20"
             }`}
           >
-            <nav className="flex flex-col space-y-2">
+            <nav className="flex flex-col  space-y-2">
               {[
                 { name: "Home", icon: <Home />, path: "/dashboard" },
                 { name: "Search", path: "/search", icon: <Search /> },
@@ -50,7 +50,7 @@ const Sidebar = ({ isOpen }) => {
                           : "hover:bg-gray-300 dark:hover:bg-gray-700"
                       } flex items-center ${
                         !isOpen ? "justify-center" : ""
-                      }  p-2 rounded-md`
+                      } p-1 rounded-md`
                     }
                   >
                     {item.icon}
@@ -61,7 +61,7 @@ const Sidebar = ({ isOpen }) => {
             </nav>
           </div>
 
-          <div className="md:hidden fixed bottom-0 left-0 w-full bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-white flex justify-around p-3 shadow-lg">
+          <div className="md:hidden fixed bottom-0 left-0 w-full bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-white flex justify-around shadow-lg">
             {[
               { name: "Home", icon: <Home />, path: "/dashboard" },
               { name: "Search", icon: <Search />, path: "/search" },
@@ -80,7 +80,7 @@ const Sidebar = ({ isOpen }) => {
                       user?.data?.profilePic || "assets/default_profile.webp"
                     }
                     alt={user?.username}
-                    className="w-8 h-8 object-cover rounded-full bg-gray-200 dark:bg-gray-500"
+                    className="w-6 h-6 object-cover rounded-full bg-gray-200 dark:bg-gray-500"
                   />
                 ),
               },
@@ -93,7 +93,7 @@ const Sidebar = ({ isOpen }) => {
                     isActive
                       ? " text-gray-100 bg-blue-500"
                       : "hover:bg-gray-300 dark:hover:bg-gray-700 dark:text-gray-100 text-gray-800"
-                  } p-2 flex items-center text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl rounded-md
+                  } p-3 flex items-center text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl rounded-md
             `}
                 >
                   {item.icon}
