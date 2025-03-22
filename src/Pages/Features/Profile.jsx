@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { updateProfile } from "../../Hooks/Redux/slices/userSlice.js";
 import { useNavigate, useParams } from "react-router-dom";
 import { APIEndPoints } from "../../Services/UrlConstants.js";
-import { Edit, LayoutGrid, Save, Upload } from "lucide-react";
+import { Edit, HeartIcon, LayoutGrid, MessageCircle, Save, Upload } from "lucide-react";
 import ProfilePosts from "../../Components/Features/Feed/ProfilePosts.jsx";
 
 const Profile = () => {
@@ -285,36 +285,7 @@ const Profile = () => {
                   )}
                 </div>
 
-                <div className="w-full border-t-1 border-gray-400">
-                  <div className="flex flex-row justify-center items-center gap-1">
-                    <LayoutGrid className="text-black dark:text-white w-4" />
-                    <p className="dark:text-gray-100 pt-3 pb-3 font-semibold text-sm sm:text-lg">
-                      Posts
-                    </p>
-                  </div>
-                  <div className="flex justify-center">
-                    <div className="grid grid-cols-3 justify-between gap-1 md:gap-1.5">
-                      {userPosts.length > 0 ? (
-                        userPosts.map((post) =>
-                          post.media.length > 0 ? (
-                            <img
-                              key={post._id}
-                              src={post.media[0].url}
-                              alt={post.title}
-                              className="w-full aspect-[3/4] object-cover bg-gray-100"
-                            />
-                          ) : null
-                        )
-                      ) : (
-                        <div className="flex justify-center items-center w-full col-span-3">
-                          <p className="dark:text-gray-100 p-5 text-base sm:text-xl">
-                            No posts available
-                          </p>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
+                <ProfilePosts userPosts={userPosts} />
               </div>
             </div>
           </>

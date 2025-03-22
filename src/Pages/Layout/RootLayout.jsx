@@ -12,12 +12,21 @@ const RootLayout = () => {
 
   return (
     <div className="flex flex-col">
-      <Navbar toggleSidebar={() => setSidebarOpen(!isSidebarOpen)} />
+      {/* <Navbar toggleSidebar={() => setSidebarOpen(!isSidebarOpen)} /> */}
+      <div className="fixed top-0 left-0 w-full bg-white dark:bg-gray-900 shadow-md z-50">
+        <Navbar toggleSidebar={() => setSidebarOpen(!isSidebarOpen)} />
+      </div>
 
       <div className="flex flex-1">
         <Sidebar isOpen={isSidebarOpen} />
 
-        <main className="flex-1 bg-white dark:bg-gray-800 pb-16 md:pb-0 min-h-screen">
+        {/* <main className="flex-1 bg-white dark:bg-gray-800 pt-16 pb-20 md:pb-0 min-h-screen"> */}
+        <main
+  className={`flex-1 bg-white dark:bg-gray-800 pt-16 pb-20 md:pb-0 min-h-screen ${
+    isSidebarOpen ? "md:ml-48" : "md:ml-20"
+  }`}
+>
+        {/* <main className="flex-1 bg-white dark:bg-gray-800 pb-16 md:pb-0 min-h-screen"> */}
           {loading ? (
             <div className="absolute inset-0 flex flex-col items-center bg-white dark:bg-gray-900 bg-opacity-75 z-50">
               <p className="text-xl sm:text-2xl md:text-2xl lg:text-3xl font-bold text-blue-500 dark:text-blue-400">
@@ -27,7 +36,7 @@ const RootLayout = () => {
             </div>
           ) : (
             <>
-              <Outlet/>
+              <Outlet />
               {isAuthenticated ? (
                 <Navigate to="/dashboard" replace />
               ) : (
@@ -38,7 +47,7 @@ const RootLayout = () => {
         </main>
       </div>
 
-      <Footer className="hidden md:block mt-auto" />
+      {/* <Footer className="hidden md:block mt-auto" /> */}
     </div>
   );
 };

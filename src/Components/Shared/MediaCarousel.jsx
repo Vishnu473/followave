@@ -179,7 +179,7 @@ const MediaCarousel = ({ media, setMedia, maxLimit, setHaveFiles, setCanceledMed
         {currentIndex > 0 && (
           <button
             onClick={prevSlide}
-            className="absolute left-2 p-1 bg-gray-800/50 rounded-full text-white"
+            className="absolute left-2 p-1 bg-gray-400/30 rounded-full text-white"
           >
             <ChevronLeft size={24} />
           </button>
@@ -205,7 +205,7 @@ const MediaCarousel = ({ media, setMedia, maxLimit, setHaveFiles, setCanceledMed
         {currentIndex < media.length - 1 && (
           <button
             onClick={nextSlide}
-            className="absolute right-2 p-1 bg-gray-800/50 rounded-full text-white"
+            className="absolute right-2 p-1 bg-gray-400/30 rounded-full text-white"
           >
             <ChevronRight size={24} />
           </button>
