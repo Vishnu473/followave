@@ -15,9 +15,11 @@ const Navbar = ({ toggleSidebar }) => {
     <nav className="bg-white text-black dark:bg-gray-900 dark:text-white py-4 shadow-lg border-b-2 border-gray-300 dark:border-gray-600 z-50">
       <div className="container flex items-center justify-between">
         <div className="flex items-center gap-4 ml-5">
-          <button className="hidden md:block" onClick={toggleSidebar}>
-            <Menu className="w-6 h-6" />
-          </button>
+          {isAuthenticated && (
+            <button className="hidden md:block" onClick={toggleSidebar}>
+              <Menu className="w-6 h-6" />
+            </button>
+          )}
           <NavLink
             to={isAuthenticated ? "/dashboard" : "/home"}
             className="text-xl sm:text-2xl md:text-2xl lg:text-3xl font-bold text-blue-500 dark:text-blue-400"

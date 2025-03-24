@@ -6,7 +6,16 @@ import { useDispatch } from "react-redux";
 import { updateProfile } from "../../Hooks/Redux/slices/userSlice.js";
 import { useNavigate, useParams } from "react-router-dom";
 import { APIEndPoints } from "../../Services/UrlConstants.js";
-import { Edit, HeartIcon, LayoutGrid, MessageCircle, Save, Upload } from "lucide-react";
+import {
+  Edit,
+  HeartIcon,
+  LayoutGrid,
+  MessageCircle,
+  MessageCircleMore,
+  Save,
+  Upload,
+  UserPlus2Icon,
+} from "lucide-react";
 import ProfilePosts from "../../Components/Features/Feed/ProfilePosts.jsx";
 
 const Profile = () => {
@@ -42,8 +51,6 @@ const Profile = () => {
         {},
         { withCredentials: true }
       );
-      // console.log(response.data.data[0].media[0].url);
-
       if (
         response.status === 200 &&
         response?.data.success &&
@@ -155,7 +162,7 @@ const Profile = () => {
   };
 
   return (
-    <div className=" lg:p-20">
+    <div>
       {isLoading ? (
         <p className="text-center text-gray-900 dark:text-white">
           Loading profile...
@@ -164,9 +171,9 @@ const Profile = () => {
         userProfile && (
           <>
             <div className="flex">
-              <div className="w-full items-start flex flex-col justify-start md:flex-col md:justify-center gap-2 md:items-center sm:gap-10 text-left sm:text-left">
+              <div className="pt-4 w-full items-start flex flex-col justify-start md:justify-around gap-2 sm:gap-4 text-left sm:text-left md:pt-8">
                 {/* UserImage with Stats */}
-                <div className="p-1 w-full flex flex-row justify-start items-center gap-x-4 md:justify-center">
+                <div className="p-1 w-full flex flex-row justify-start md:justify-evenly gap-x-4">
                   <div className="relative flex-shrink-0">
                     <img
                       src={
@@ -178,7 +185,7 @@ const Profile = () => {
                       className="w-20 h-20 object-cover bg:gray-100 sm:w-36 sm:h-36 lg:w-44 lg:h-44 rounded-full border border-gray-700 dark:border-gray-300 bg-gray-200 dark:bg-gray-500"
                     />
                     {!profileId && editMode && (
-                      <label className="absolute bottom-1 right-1 md:bottom-2 md:right-2 lg:bottom-3 lg:right-3 bg-gray-800 text-white p-1 rounded-full cursor-pointer">
+                      <label className="absolute top-12 sm:top-24 right-1 md:top-28 md:right-2 lg:top-36 lg:right-3 bg-gray-800 text-white p-1 rounded-full cursor-pointer">
                         <Upload className="w-3 h-3 sm:w-4 sm:h-4 lg:w-4 lg:h-4" />
                         <input
                           type="file"
@@ -189,38 +196,8 @@ const Profile = () => {
                     )}
                   </div>
                   {/* Stats */}
-                  <div className="flex flex-row justify-end gap-x-2 sm:gap-x-4 lg:gap-x-6">
-                    <div className="text-center">
-                      <p className="text-sm sm:text-xl lg:text-2xl dark:text-gray-100 md:font-bold">
-                        12
-                      </p>
-                      <p className="text-sm sm:text-xl lg:text-2xl dark:text-gray-400">
-                        Posts
-                      </p>
-                    </div>
-                    <div className="text-center">
-                      <p className="text-sm sm:text-xl lg:text-2xl dark:text-gray-100 md:font-bold">
-                        12345
-                      </p>
-                      <p className="text-sm sm:text-xl lg:text-2xl dark:text-gray-400">
-                        Followers
-                      </p>
-                    </div>
-                    <div className="text-center">
-                      <p className="text-sm sm:text-xl lg:text-2xl dark:text-gray-100 md:font-bold">
-                        6789
-                      </p>
-                      <p className="text-sm sm:text-xl lg:text-2xl dark:text-gray-400">
-                        Following
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Edit and View Mode */}
-                <div className="p-1 flex flex-col gap-1">
-                  {editMode ? (
-                    <>
+                  <div className="flex flex-col gap-1 md:gap-2">
+                    {editMode ? (
                       <input
                         type="text"
                         name="username"
@@ -228,61 +205,135 @@ const Profile = () => {
                         onChange={handleChange}
                         className="text-lg sm:text-2xl lg:text-3xl font-bold bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white p-1 rounded"
                       />
-                      <input
-                        type="email"
-                        name="email"
-                        value={updatedProfile.email}
-                        onChange={handleChange}
-                        className="text-base sm:text-xl bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white p-1 rounded"
-                      />
-                      <textarea
-                        name="bio"
-                        value={updatedProfile.bio}
-                        onChange={handleChange}
-                        className="text-sm sm:text-lg bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white p-1 rounded"
-                      />
-                    </>
-                  ) : (
-                    <>
+                    ) : (
                       <p className="text-lg sm:text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white">
                         {userProfile.username}
                       </p>
-                      <p className="text-base sm:text-xl text-gray-900 dark:text-white">
-                        {userProfile.email}
-                      </p>
-                      <p className="text-sm sm:text-lg text-gray-900 dark:text-white">
-                        {userProfile.bio}
-                      </p>
-                    </>
-                  )}
-
-                  {!profileId && (
-                    <div className="flex gap-2 mt-2">
-                      {editMode ? (
-                        <>
-                          <button
-                            onClick={handleSave}
-                            className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
-                          >
-                            <Save className="w-4 h-4 inline-block" /> Save
-                          </button>
+                    )}
+                    <div className="hidden md:flex flex-row gap-8">
+                      <div className="flex flex-row gap-2">
+                        <p className="text-sm sm:text-lg lg:text-xl dark:text-gray-100 font-bold">
+                          {userPosts ? userPosts.length : 0 }
+                        </p>
+                        <p className="text-sm sm:text-lg lg:text-xl text-gray-500 dark:text-gray-400">
+                          Posts
+                        </p>
+                      </div>
+                      <div className="flex flex-row gap-2">
+                        <p className="text-sm sm:text-lg lg:text-xl dark:text-gray-100 font-bold">
+                          12345
+                        </p>
+                        <p className="text-sm sm:text-lg lg:text-xl text-gray-500 dark:text-gray-400">
+                          Followers
+                        </p>
+                      </div>
+                      <div className="flex flex-row gap-2">
+                        <p className="text-sm sm:text-lg lg:text-xl dark:text-gray-100 font-bold">
+                          6789
+                        </p>
+                        <p className="text-sm sm:text-lg lg:text-xl text-gray-500 dark:text-gray-400">
+                          Following
+                        </p>
+                      </div>
+                    </div>
+                    {editMode ? (
+                      <>
+                        <input
+                          type="email"
+                          name="email"
+                          value={updatedProfile.email}
+                          onChange={handleChange}
+                          className="text-base sm:text-xl bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white p-1 rounded"
+                        />
+                        <textarea
+                          name="bio"
+                          value={updatedProfile.bio}
+                          onChange={handleChange}
+                          className="text-sm sm:text-lg bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white p-1 rounded"
+                        />
+                      </>
+                    ) : (
+                      <>
+                        <p className="text-base sm:text-xl text-gray-900 dark:text-white">
+                          {userProfile.email}
+                        </p>
+                        <p className="text-sm sm:text-lg text-gray-900 dark:text-white">
+                          {userProfile.bio}
+                        </p>
+                      </>
+                    )}
+                    <div className="flex gap-2">
+                    {!profileId ? (
+                      <div className="flex gap-2 mt-2">
+                        {editMode ? (
+                          <>
+                            <button
+                              onClick={handleSave}
+                              className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
+                            >
+                              <Save className="w-4 h-4 inline-block" /> Save
+                            </button>
+                            <button
+                              onClick={handleEditToggle}
+                              className="bg-gray-500 text-white px-3 py-1 rounded hover:bg-gray-600"
+                            >
+                              Cancel
+                            </button>
+                          </>
+                        ) : (
                           <button
                             onClick={handleEditToggle}
-                            className="bg-gray-500 text-white px-3 py-1 rounded hover:bg-gray-600"
+                            className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
                           >
-                            Cancel
+                            <Edit className="w-4 h-4 inline-block" /> Edit
                           </button>
-                        </>
-                      ) : (
-                        <button
-                          onClick={handleEditToggle}
-                          className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
-                        >
-                          <Edit className="w-4 h-4 inline-block" /> Edit
-                        </button>
-                      )}
-                    </div>
-                  )}
+                        )}
+                      </div>
+                    ) : 
+                    //Check if following show UnFollow else Follow
+                    
+                    (true ? (
+                      <button className="bg-gray-400 text-white px-3 py-1 rounded">
+                        UnFollow
+                      </button>
+                    ) : (
+                      <button className="bg-blue-400 text-white px-3 py-1 rounded">
+                        <UserPlus2Icon className="w-4 h-4 inline-block" />{" "}
+                        Follow
+                      </button>
+                    ))}
+                    <button className="bg-gray-400 text-white px-3 py-1 rounded">
+                        <MessageCircleMore className="w-4 h-4 inline-block" />{" "}
+                        Message
+                      </button>
+                      </div>
+                  </div>
+                </div>
+                <div className="w-full flex flex-row justify-evenly md:hidden">
+                  <div className="text-center">
+                    <p className="text-sm sm:text-lg lg:text-xl dark:text-gray-100 font-bold">
+                    {userPosts ? userPosts.length : 0 }
+                    </p>
+                    <p className="text-sm sm:text-lg lg:text-xl dark:text-gray-400">
+                      Posts
+                    </p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-sm sm:text-lg lg:text-xl dark:text-gray-100 font-bold">
+                      12345
+                    </p>
+                    <p className="text-sm sm:text-lg lg:text-xl dark:text-gray-400">
+                      Followers
+                    </p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-sm sm:text-lg lg:text-xl dark:text-gray-100 font-bold">
+                      6789
+                    </p>
+                    <p className="text-sm sm:text-lg lg:text-xl dark:text-gray-400">
+                      Following
+                    </p>
+                  </div>
                 </div>
 
                 <ProfilePosts userPosts={userPosts} />
