@@ -30,6 +30,7 @@ const Profile = () => {
   const [editMode, setEditMode] = useState(false);
   const [updatedProfile, setUpdatedProfile] = useState({});
   const [selectedImage, setSelectedImage] = useState(null);
+  const [uploadedImage, setUploadedImage] = useState(null);
 
   useEffect(() => {
     if (profileId) {
@@ -89,7 +90,22 @@ const Profile = () => {
     }
   };
 
-  const handleEditToggle = () => {
+  const handleEditToggle = async (Edittype) => {
+    if (Edittype === "Cancel") {
+      try {
+        if (uploadedImage?.file?.filename) {
+          await api.delete(APIEndPoints.deleteMedia, {
+            data: { publicIds: [uploadedImage?.file?.filename] },
+            withCredentials: true,
+          });
+        }
+      } catch (error) {
+        console.error("Failed to delete image:", error);
+      }
+      setSelectedImage(null);
+      setUserProfile((prev) => ({ ...prev, profilePic: null }));
+    }
+
     setEditMode(!editMode);
     setUpdatedProfile(userProfile); // Reset changes if canceled
   };
@@ -143,6 +159,7 @@ const Profile = () => {
         );
 
         if (response.status === 200) {
+          setUploadedImage(response.data);
           const imageUrl = response.data.url;
 
           setUserProfile({
@@ -156,9 +173,22 @@ const Profile = () => {
           });
         }
       } catch (error) {
-        Swal.fire("Error", "Failed to update image", "error");
+        console.log(error);
+
+        Swal.fire(
+          "Error",
+          error?.response?.data?.message ?? "Failed to update image",
+          "error"
+        );
       }
     }
+  };
+
+  const showPosts = (userProfile) => {
+    return userProfile?.privacy === "public" ||
+      userProfile?.privacy === "followers"
+      ? true
+      : false;
   };
 
   return (
@@ -213,7 +243,7 @@ const Profile = () => {
                     <div className="hidden md:flex flex-row gap-8">
                       <div className="flex flex-row gap-2">
                         <p className="text-sm sm:text-lg lg:text-xl dark:text-gray-100 font-bold">
-                          {userPosts ? userPosts.length : 0 }
+                          {userPosts ? userPosts.length : 0}
                         </p>
                         <p className="text-sm sm:text-lg lg:text-xl text-gray-500 dark:text-gray-400">
                           Posts
@@ -263,56 +293,55 @@ const Profile = () => {
                       </>
                     )}
                     <div className="flex gap-2">
-                    {!profileId ? (
-                      <div className="flex gap-2 mt-2">
-                        {editMode ? (
-                          <>
+                      {!profileId ? (
+                        <div className="flex gap-2 mt-2">
+                          {editMode ? (
+                            <>
+                              <button
+                                onClick={handleSave}
+                                className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
+                              >
+                                <Save className="w-4 h-4 inline-block" /> Save
+                              </button>
+                              <button
+                                onClick={() => handleEditToggle("Cancel")}
+                                className="bg-gray-500 text-white px-3 py-1 rounded hover:bg-gray-600"
+                              >
+                                Cancel
+                              </button>
+                            </>
+                          ) : (
                             <button
-                              onClick={handleSave}
-                              className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
+                              onClick={() => handleEditToggle("Edit")}
+                              className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
                             >
-                              <Save className="w-4 h-4 inline-block" /> Save
+                              <Edit className="w-4 h-4 inline-block" /> Edit
                             </button>
-                            <button
-                              onClick={handleEditToggle}
-                              className="bg-gray-500 text-white px-3 py-1 rounded hover:bg-gray-600"
-                            >
-                              Cancel
-                            </button>
-                          </>
-                        ) : (
-                          <button
-                            onClick={handleEditToggle}
-                            className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
-                          >
-                            <Edit className="w-4 h-4 inline-block" /> Edit
-                          </button>
-                        )}
-                      </div>
-                    ) : 
-                    //Check if following show UnFollow else Follow
-                    
-                    (true ? (
+                          )}
+                        </div>
+                      ) : //Check if following show UnFollow else Follow
+
+                      true ? (
+                        <button className="bg-gray-400 text-white px-3 py-1 rounded">
+                          UnFollow
+                        </button>
+                      ) : (
+                        <button className="bg-blue-400 text-white px-3 py-1 rounded">
+                          <UserPlus2Icon className="w-4 h-4 inline-block" />{" "}
+                          Follow
+                        </button>
+                      )}
                       <button className="bg-gray-400 text-white px-3 py-1 rounded">
-                        UnFollow
-                      </button>
-                    ) : (
-                      <button className="bg-blue-400 text-white px-3 py-1 rounded">
-                        <UserPlus2Icon className="w-4 h-4 inline-block" />{" "}
-                        Follow
-                      </button>
-                    ))}
-                    <button className="bg-gray-400 text-white px-3 py-1 rounded">
                         <MessageCircleMore className="w-4 h-4 inline-block" />{" "}
                         Message
                       </button>
-                      </div>
+                    </div>
                   </div>
                 </div>
                 <div className="w-full flex flex-row justify-evenly md:hidden">
                   <div className="text-center">
                     <p className="text-sm sm:text-lg lg:text-xl dark:text-gray-100 font-bold">
-                    {userPosts ? userPosts.length : 0 }
+                      {userPosts ? userPosts.length : 0}
                     </p>
                     <p className="text-sm sm:text-lg lg:text-xl dark:text-gray-400">
                       Posts
@@ -336,7 +365,11 @@ const Profile = () => {
                   </div>
                 </div>
 
-                <ProfilePosts userPosts={userPosts} />
+                <ProfilePosts
+                  userPosts={userPosts}
+                  user={userProfile}
+                  profilePrivacy={showPosts(userProfile)}
+                />
               </div>
             </div>
           </>

@@ -204,6 +204,8 @@ const AddPostForm = () => {
         const removedMediaRequest = {
           publicIds: removedMedia.map((md) => md.publicId),
         };
+        console.log(removedMediaRequest);
+        
         const response = await api.delete(APIEndPoints.deleteMedia, {
           data: removedMediaRequest,
           withCredentials: true,

@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom';
 
 const Home = () => {
     return (
@@ -6,6 +7,7 @@ const Home = () => {
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-black dark:text-gray-100">
             Followave
           </h1>
+          <p className='text-xl md:text-lg sm:text-md text-gray-500 dark:text-gray-300'>Kindly Login <Link to={"/auth/login"} replace className='underline text-blue-400'>here</Link></p>
         </div>
       );
 }

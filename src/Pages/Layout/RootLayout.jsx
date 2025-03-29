@@ -8,7 +8,7 @@ import { Loading } from "../../Components/Shared/Loading";
 
 const RootLayout = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
-  const { loading, isAuthenticated } = useSelector((state) => state.user);
+  const { loading, isAuthenticated, user } = useSelector((state) => state.user);
 
   return (
     <div className="flex flex-col">
@@ -25,7 +25,7 @@ const RootLayout = () => {
             isAuthenticated ? isSidebarOpen ? "md:ml-48" : "md:ml-20" : ""
           }`}
         >
-          {loading ? (
+          {user && loading  ? (
             <div className="absolute inset-0 flex flex-col items-center bg-white dark:bg-gray-900 bg-opacity-75 z-50">
               <p className="text-xl sm:text-2xl md:text-2xl lg:text-3xl font-bold text-blue-500 dark:text-blue-400">
                 {import.meta.env.VITE_APP_NAME}
