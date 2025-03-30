@@ -16,7 +16,9 @@ import {
   Upload,
   UserPlus2Icon,
 } from "lucide-react";
-import ProfilePosts from "../../Components/Features/Feed/ProfilePosts.jsx";
+import ProfilePosts from "../../Components/Features/Profile/ProfilePosts.jsx";
+import ProfileStats from "../../Components/Features/Profile/ProfileStats.jsx";
+import ProfileWrapper from "../../Components/Features/Profile/ProfileWrapper.jsx";
 
 const Profile = () => {
   const { profileId } = useParams();
@@ -31,6 +33,8 @@ const Profile = () => {
   const [updatedProfile, setUpdatedProfile] = useState({});
   const [selectedImage, setSelectedImage] = useState(null);
   const [uploadedImage, setUploadedImage] = useState(null);
+  const [userId, setUserId] = useState("");
+  const [isSelf, setIsSelf] = useState(false);
 
   useEffect(() => {
     if (profileId) {
@@ -42,12 +46,17 @@ const Profile = () => {
       getUserPosts(user?.data._id);
       setUpdatedProfile(user?.data);
     }
+    const id = profileId ? profileId : user?.data?._id;
+    setUserId(id);
+    setIsSelf(!profileId);
   }, [user, profileId]);
 
   const getUserPosts = async (userId) => {
     setIsLoading(true);
     try {
-      const response = await api.post(
+      const response = isSelf ? await api.get(APIEndPoints.getAllPosts,{},
+        { withCredentials: true }
+      ):await api.post(
         APIEndPoints.getUserposts(userId),
         {},
         { withCredentials: true }
@@ -185,6 +194,9 @@ const Profile = () => {
   };
 
   const showPosts = (userProfile) => {
+    if( isSelf){
+      return true
+    }
     return userProfile?.privacy === "public" ||
       userProfile?.privacy === "followers"
       ? true
@@ -240,32 +252,14 @@ const Profile = () => {
                         {userProfile.username}
                       </p>
                     )}
-                    <div className="hidden md:flex flex-row gap-8">
-                      <div className="flex flex-row gap-2">
-                        <p className="text-sm sm:text-lg lg:text-xl dark:text-gray-100 font-bold">
-                          {userPosts ? userPosts.length : 0}
-                        </p>
-                        <p className="text-sm sm:text-lg lg:text-xl text-gray-500 dark:text-gray-400">
-                          Posts
-                        </p>
-                      </div>
-                      <div className="flex flex-row gap-2">
-                        <p className="text-sm sm:text-lg lg:text-xl dark:text-gray-100 font-bold">
-                          12345
-                        </p>
-                        <p className="text-sm sm:text-lg lg:text-xl text-gray-500 dark:text-gray-400">
-                          Followers
-                        </p>
-                      </div>
-                      <div className="flex flex-row gap-2">
-                        <p className="text-sm sm:text-lg lg:text-xl dark:text-gray-100 font-bold">
-                          6789
-                        </p>
-                        <p className="text-sm sm:text-lg lg:text-xl text-gray-500 dark:text-gray-400">
-                          Following
-                        </p>
-                      </div>
-                    </div>
+                <ProfileWrapper device="desktop" postsNum={userPosts?.length} id={userId} isSelf={isSelf} />
+
+                    {/* <ProfileStats
+                      device="desktop"
+                      postsNum={userPosts?.length}
+                      id={userId}
+                      isSelf={isSelf}
+                    /> */}
                     {editMode ? (
                       <>
                         <input
@@ -338,32 +332,14 @@ const Profile = () => {
                     </div>
                   </div>
                 </div>
-                <div className="w-full flex flex-row justify-evenly md:hidden">
-                  <div className="text-center">
-                    <p className="text-sm sm:text-lg lg:text-xl dark:text-gray-100 font-bold">
-                      {userPosts ? userPosts.length : 0}
-                    </p>
-                    <p className="text-sm sm:text-lg lg:text-xl dark:text-gray-400">
-                      Posts
-                    </p>
-                  </div>
-                  <div className="text-center">
-                    <p className="text-sm sm:text-lg lg:text-xl dark:text-gray-100 font-bold">
-                      12345
-                    </p>
-                    <p className="text-sm sm:text-lg lg:text-xl dark:text-gray-400">
-                      Followers
-                    </p>
-                  </div>
-                  <div className="text-center">
-                    <p className="text-sm sm:text-lg lg:text-xl dark:text-gray-100 font-bold">
-                      6789
-                    </p>
-                    <p className="text-sm sm:text-lg lg:text-xl dark:text-gray-400">
-                      Following
-                    </p>
-                  </div>
-                </div>
+<ProfileWrapper device="mobile" postsNum={userPosts?.length} id={userId} isSelf={isSelf} />
+
+                {/* <ProfileStats
+                  device="mobile"
+                  postsNum={userPosts?.length}
+                  id={userId}
+                  isSelf={isSelf}
+                /> */}
 
                 <ProfilePosts
                   userPosts={userPosts}

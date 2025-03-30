@@ -18,5 +18,6 @@ export const APIEndPoints = {
 
   //Post API endPoints
   addPost:"posts/add-post",
+  getAllPosts: "/posts/get-all",
   getUserposts: (userId) => `/posts/get-user-posts/${userId}`
 };
