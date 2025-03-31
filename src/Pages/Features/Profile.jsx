@@ -8,19 +8,12 @@ import { useNavigate, useParams } from "react-router-dom";
 import { APIEndPoints } from "../../Services/UrlConstants.js";
 import {
   Edit,
-  HeartIcon,
-  LayoutGrid,
-  MessageCircle,
-  MessageCircleMore,
   Save,
   Upload,
-  UserPlus2Icon,
 } from "lucide-react";
 import ProfilePosts from "../../Components/Features/Profile/ProfilePosts.jsx";
 import ProfileStats from "../../Components/Features/Profile/ProfileStats.jsx";
-import ProfileWrapper from "../../Components/Features/Profile/ProfileWrapper.jsx";
 import ProfileFollow from "../../Components/Features/Profile/ProfileFollow.jsx";
-import ProfilePendingRequests from "../../Components/Features/Profile/ProfilePendingRequests.jsx";
 
 const Profile = () => {
   const { profileId } = useParams();
@@ -126,7 +119,7 @@ const Profile = () => {
     }
 
     setEditMode(!editMode);
-    setUpdatedProfile(userProfile); // Reset changes if canceled
+    setUpdatedProfile(userProfile);
   };
 
   const handleChange = (e) => {

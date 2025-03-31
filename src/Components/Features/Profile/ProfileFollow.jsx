@@ -70,7 +70,7 @@ const ProfileFollow = ({ id, fetchFollowStats, isSelf }) => {
             : isFollowStatus === "accepted"
             ? "bg-gray-500 text-white"
             : isFollowStatus === "pending"
-            ? "dark:border-yellow-500 border dark:text-yellow-500 bg-yellow-500"
+            ? "dark:border-yellow-500 border dark:bg-transparent dark:text-yellow-500 text-black bg-yellow-500"
             : "bg-blue-500 text-white"
         }`}
         onClick={() =>
