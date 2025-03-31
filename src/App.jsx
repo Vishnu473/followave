@@ -13,6 +13,8 @@ import Home from "./Pages/Main/Home";
 import AccountSettings from "./Pages/Features/AccountSettings";
 import AddPost from "./Components/Features/Posts/addPost";
 import AddPostForm from "./Components/Features/Posts/AddPostForm";
+import Notifications from "./Pages/Features/Notifications";
+import ProfilePendingRequests from "./Components/Features/Profile/ProfilePendingRequests";
 
 const routes = createBrowserRouter(
   [
@@ -31,6 +33,14 @@ const routes = createBrowserRouter(
         {
           path: "dashboard",
           element: <Dashboard />,
+        },
+        {
+          path:"pendingRequests",
+          element: <ProfilePendingRequests />
+        },
+        {
+          path:"notifications",
+          element:<Notifications/>
         },
         {
           path: "profile",

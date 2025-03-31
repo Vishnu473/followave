@@ -19,6 +19,8 @@ import {
 import ProfilePosts from "../../Components/Features/Profile/ProfilePosts.jsx";
 import ProfileStats from "../../Components/Features/Profile/ProfileStats.jsx";
 import ProfileWrapper from "../../Components/Features/Profile/ProfileWrapper.jsx";
+import ProfileFollow from "../../Components/Features/Profile/ProfileFollow.jsx";
+import ProfilePendingRequests from "../../Components/Features/Profile/ProfilePendingRequests.jsx";
 
 const Profile = () => {
   const { profileId } = useParams();
@@ -35,6 +37,14 @@ const Profile = () => {
   const [uploadedImage, setUploadedImage] = useState(null);
   const [userId, setUserId] = useState("");
   const [isSelf, setIsSelf] = useState(false);
+
+  const [followStats, setFollowStats] = useState({
+    followers: 0,
+    following: 0,
+    pendingFollowers: 0,
+    pendingFollowing: 0,
+    blockedFollowers: 1,
+  });
 
   useEffect(() => {
     if (profileId) {
@@ -54,13 +64,13 @@ const Profile = () => {
   const getUserPosts = async (userId) => {
     setIsLoading(true);
     try {
-      const response = isSelf ? await api.get(APIEndPoints.getAllPosts,{},
-        { withCredentials: true }
-      ):await api.post(
-        APIEndPoints.getUserposts(userId),
-        {},
-        { withCredentials: true }
-      );
+      const response = isSelf
+        ? await api.get(APIEndPoints.getAllPosts, {}, { withCredentials: true })
+        : await api.post(
+            APIEndPoints.getUserposts(userId),
+            {},
+            { withCredentials: true }
+          );
       if (
         response.status === 200 &&
         response?.data.success &&
@@ -193,14 +203,38 @@ const Profile = () => {
     }
   };
 
+  const fetchFollowStats = async () => {
+    try {
+      const response = isSelf
+        ? await api.get("/follow/getMyFollowStats")
+        : await api.get(`/follow/getUserFollowStats/${userId}`);
+
+      if (response.status === 200 && response?.data?.success) {
+        setFollowStats({
+          followers: response?.data?.data?.followers,
+          following: response?.data?.data?.following,
+          pendingFollowers: isSelf ? response?.data?.data?.pendingFollowers : 0,
+          pendingFollowing: isSelf ? response?.data?.data?.pendingFollowing : 0,
+          blockedFollowers: isSelf ? response?.data?.data?.blockedFollowers : 0,
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching follow stats:", error);
+    }
+  };
+
   const showPosts = (userProfile) => {
-    if( isSelf){
-      return true
+    if (isSelf) {
+      return true;
     }
     return userProfile?.privacy === "public" ||
       userProfile?.privacy === "followers"
       ? true
       : false;
+  };
+
+  const viewPendingRequests = async () => {
+    navigate("/pendingRequests");
   };
 
   return (
@@ -252,14 +286,12 @@ const Profile = () => {
                         {userProfile.username}
                       </p>
                     )}
-                <ProfileWrapper device="desktop" postsNum={userPosts?.length} id={userId} isSelf={isSelf} />
-
-                    {/* <ProfileStats
+                    <ProfileStats
                       device="desktop"
                       postsNum={userPosts?.length}
-                      id={userId}
-                      isSelf={isSelf}
-                    /> */}
+                      followStats={followStats}
+                      fetchFollowStats={fetchFollowStats}
+                    />
                     {editMode ? (
                       <>
                         <input
@@ -305,41 +337,45 @@ const Profile = () => {
                               </button>
                             </>
                           ) : (
-                            <button
-                              onClick={() => handleEditToggle("Edit")}
-                              className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
-                            >
-                              <Edit className="w-4 h-4 inline-block" /> Edit
-                            </button>
+                            <div className="flex flex-col gap-2 min-[330px]:flex-row">
+                              <button
+                                onClick={() => handleEditToggle("Edit")}
+                                className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
+                              >
+                                <Edit className="w-4 h-4 inline-block" /> Edit
+                              </button>
+                              <div className="relative inline-block">
+                                <button
+                                  onClick={viewPendingRequests}
+                                  className="text-gray-800 dark:text-white border border-gray-800 dark:border-gray-400 rounded-sm px-3 py-1"
+                                >
+                                  Follow requests
+                                </button>
+                                {followStats.pendingFollowers > 0 ? (
+                                  <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full px-1.5 text-xs">
+                                    {followStats.pendingFollowers}
+                                  </span>
+                                ) : null}
+                              </div>
+                            </div>
                           )}
                         </div>
-                      ) : //Check if following show UnFollow else Follow
-
-                      true ? (
-                        <button className="bg-gray-400 text-white px-3 py-1 rounded">
-                          UnFollow
-                        </button>
                       ) : (
-                        <button className="bg-blue-400 text-white px-3 py-1 rounded">
-                          <UserPlus2Icon className="w-4 h-4 inline-block" />{" "}
-                          Follow
-                        </button>
+                        <ProfileFollow
+                          id={userId}
+                          isSelf={isSelf}
+                          fetchFollowStats={fetchFollowStats}
+                        />
                       )}
-                      <button className="bg-gray-400 text-white px-3 py-1 rounded">
-                        <MessageCircleMore className="w-4 h-4 inline-block" />{" "}
-                        Message
-                      </button>
                     </div>
                   </div>
                 </div>
-<ProfileWrapper device="mobile" postsNum={userPosts?.length} id={userId} isSelf={isSelf} />
-
-                {/* <ProfileStats
+                <ProfileStats
                   device="mobile"
                   postsNum={userPosts?.length}
-                  id={userId}
-                  isSelf={isSelf}
-                /> */}
+                  followStats={followStats}
+                  fetchFollowStats={fetchFollowStats}
+                />
 
                 <ProfilePosts
                   userPosts={userPosts}

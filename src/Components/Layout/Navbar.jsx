@@ -63,7 +63,7 @@ const Navbar = ({ toggleSidebar }) => {
                 {theme === "light" ? <Moon /> : <Sun />}
               </button>
               <NavLink
-                to="/dashboard"
+                to="/notifications"
                 className={({ isActive }) =>
                   isActive
                     ? `text-blue-500 dark:text-blue-300 border-b-1 border-b-blue-500 dark:border-b-blue-300`

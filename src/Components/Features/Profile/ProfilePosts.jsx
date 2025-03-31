@@ -46,8 +46,8 @@ const ProfilePosts = ({ userPosts, profilePrivacy, user }) => {
           ) : (
             <div className="h-full w-full border-t-1 border-gray-500">
               <div className="flex gap-2 p-4 flex-col justify-center items-center gap:6">
-                <div className="border-1 p-2 rounded-full text-gray-700">
-                  <Camera className="dark:text-gray-500 text-gray-700 w-7 h-7 md:w-12 md:h-12 " />
+                <div className="border p-2 rounded-full text-gray-600">
+                  <Camera className="dark:text-gray-500 text-gray-600 w-7 h-7 md:w-12 md:h-12 " />
                 </div>
 
                 <div className="text-center">
@@ -64,7 +64,7 @@ const ProfilePosts = ({ userPosts, profilePrivacy, user }) => {
         </div>
       ) : (
         <div className="flex flex-col md:flex-row border-y-1 dark:border-gray-700 border-gray-300 justify-center p-6 gap-2 md:gap-4 items-center w-full col-span-3">
-          <div className="border-1 p-2 rounded-3xl text-gray-700">
+          <div className="border p-2 rounded-3xl text-gray-700">
             <LockIcon className="dark:text-gray-500 text-gray-700 w-5 h-5 md:w-7 md:h-7 " />
           </div>
           <div className="text-center md:text-left">

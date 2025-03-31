@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from "react";
+import React, { lazy, memo, Suspense } from "react";
 import ProfileStatsSkeleton from "./ProfileStatsSkeleton";
 
 // const ProfileStats = lazy(() => import("./ProfileStats"));
@@ -9,7 +9,7 @@ const ProfileStats = lazy(
     )
 );
 
-const ProfileWrapper = ({ device, postsNum, id, isSelf }) => {
+const ProfileWrapper = memo(({ device, postsNum, id, isSelf }) => {
   return (
     <>
       {/* Desktop Skeleton */}
@@ -37,6 +37,6 @@ const ProfileWrapper = ({ device, postsNum, id, isSelf }) => {
       )}
     </>
   );
-};
+});
 
 export default ProfileWrapper;
